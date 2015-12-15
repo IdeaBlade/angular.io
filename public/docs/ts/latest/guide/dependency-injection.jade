@@ -7,29 +7,16 @@ include ../../../../_includes/_util-fns
   In this chapter we'll learn what Dependency Injection is, why we want it, and how to use it.
   <a name="why-di"></a>
 .l-main-section
+
+
 :marked
   ## Why Dependency Injection?
 
   Let's start with the following code.
 
-  ```
-  class Engine {}
++makeExample('dependency-injection/ts/src/app/car.ts')
 
-  class Tires {}
-
-  class Car {
-    private engine: Engine;
-    private tires: Tires;
-
-    constructor() {
-      this.engine = new Engine();
-      this.tires = new Tires();
-    }
-    // Method using the engine and tires
-    drive() {}
-  }
-  ```
-
+:marked
   Our `Car` creates everything it needs inside its constructor.
   What's the problem?
 
@@ -125,13 +112,10 @@ include ../../../../_includes/_util-fns
   We need something that takes care of assembling these parts for us.
 
   We could write a giant class to do that:
-  ```
-  class SuperFactory {
-    createEngine = () => new Engine();
-    createTires =  () => new Tires();
-    createCar = () => new Car(this.createEngine(), this.createTires());
-  }
-  ```
+
++makeExample('dependency-injection/ts/src/app/super_factory.ts')
+
+:marked
   It's not so bad now with only three creation methods.
   But maintaining it will be hairy as the application grows.
   This `SuperFactory` is going to become a huge spider web of
@@ -157,7 +141,7 @@ include ../../../../_includes/_util-fns
   We don't have a gigantic factory class to maintain.
   Both `Car` and consumer simply ask for what they need and the `Injector` delivers.
 
-  This is what a **Dependency InjectionFramework** is all about.
+  This is what a **Dependency Injection Framework** is all about.
 
   Now that we know what Dependency Injection is and appreciate its benefits,
   let's see how it is implemented in Angular.
@@ -174,21 +158,17 @@ include ../../../../_includes/_util-fns
 
   We'll begin with a simplified version of the `HeroesComponent`
   that we built in the [The Tour of Heroes](../tutorial/).
-  ```
-  import {Component} from 'angular2/angular2';
-  import {Hero} from './hero';
-  import {HEROES} from './mock-heroes';
 
-  @Component({
-    selector: 'my-heroes'
-    templateUrl: 'app/heroes.component.html'
-  })
-  export class HeroesComponent {
++makeTabs(
+  `dependency-injection/ts/src/app/heroes.component.ts,
+  dependency-injection/ts/src/app/hero.ts,
+  dependency-injection/ts/src/app/mock_heroes.ts`,
+  '',
+  `heroes.component.ts,
+  hero.ts,
+  mock_heroes.ts`)
 
-    heroes: Hero[] = HEROES;
-
-  }
-  ```
+:marked
   It assigns a list of mocked heroes to its `heroes` property for binding within the template.
   Pretty straight forward.
 
@@ -202,24 +182,10 @@ include ../../../../_includes/_util-fns
 .l-sub-section
   :marked
     Write this service in its own file. See [this note](#forward-ref) to understand why.
+
++makeExample('dependency-injection/ts/src/app/hero.service.ts')
+
 :marked
-  ```
-  import {Hero} from './hero';
-  import {HEROES} from './mock-heroes';
-
-  class HeroService {
-
-    heroes: Hero[];
-
-    constructor() {
-      this.heroes = HEROES;
-    }
-
-    getHeroes() {
-      return this.heroes;
-    }
-  }
-  ```
   Our `HeroService` exposes a `getHeroes()` method that returns
   the same mock data as before but none of its consumers need to know that.
 
@@ -248,7 +214,7 @@ include ../../../../_includes/_util-fns
 
   The `HeroesComponent` should get its heroes from this service.
   Per the dependency injection pattern, the component must "ask for" the service in its constructor [as we explained
-  earlier](#ctor-injection)".
+  earlier](#ctor-injection).
 
   ```
   constructor(heroService: HeroService) {
@@ -260,7 +226,7 @@ include ../../../../_includes/_util-fns
   :marked
     Adding a parameter to the constructor isn't all that's happening here.
 
-    We are writing the app in TypeScript and have followed the parameter name with a type notation, `:HeroService`.
+    We are writing the app in TypeScript and have followed the parameter name with a type annotation, `:HeroService`.
     The class is also decorated with the `@Component` decorator (scroll up to confirm that fact).
 
     When the TypeScript compiler evaluates this class, it sees the decorator and adds class metadata
@@ -284,7 +250,7 @@ include ../../../../_includes/_util-fns
   Angular does that for us when it renders a `HeroesComponent`
   whether we ask for it in an HTML template ...
   ```
-  <my-heroes></heroes>
+  <my-heroes></my-heroes>
   ```
   ... or navigate to a `HeroesComponent` view with the [router](./router.html).
 
@@ -315,27 +281,10 @@ include ../../../../_includes/_util-fns
   We'd apply the same "constructor injection" pattern.
 
   Here's a rewrite of `HeroService` with a new constructor that takes a `logger` parameter.
-  ```
-  import {Injectable} from 'angular2/angular2';
-  import {Hero} from './hero';
-  import {HEROES} from './mock-heroes';
-  import {Logger} from './logger';
+  
++makeExample('dependency-injection/ts/src/app/hero_with_logger.service.ts')
 
-  @Injectable()
-  class HeroService {
-
-    heroes: Hero[];
-
-    constructor(private logger: Logger) {
-      this.heroes = HEROES;
-    }
-
-    getHeroes() {
-      this.logger.log('Getting heroes ...')
-      return this.heroes;
-    }
-  }
-  ```
+:marked
   The constructor now asks for an injected instance of a `Logger` and stores it in a private property called `logger`.
   We call that property within our `getHeroes()` method when anyone asks for heroes.
 
@@ -349,7 +298,7 @@ include ../../../../_includes/_util-fns
   We haven't seen `@Injectable()` before.
   As it happens, we could have added it to `HeroService`. We didn't bother because we didn't need it then.
 
-  We need it now ... now that our service has an injected dependency.
+  We need it now... now that our service has an injected dependency.
   We need it because Angular requires constructor parameter metadata in order to inject a `Logger`.
   As [we mentioned earlier](#di-metadata), TypeScript *only generates metadata for classes that have a decorator*. .
 
