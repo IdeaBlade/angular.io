@@ -33,7 +33,6 @@ h3 {
 }
 h4 {
   position: relative;
-  left: -10px;
 }
 .module:hover {
   background-color: #EEE;
