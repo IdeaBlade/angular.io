@@ -1,6 +1,6 @@
 .selected {
-  background-color: #EEE;
-  color: #263238;
+  background-color: #CFD8DC !important;
+  color: white;
 }
 .heroes {
   margin: 0 0 2em 0;
@@ -22,6 +22,9 @@
   color: #607D8B;
   background-color: #EEE;
   left: .1em;
+}
+.heroes li.selected:hover {
+  color: white;
 }
 .heroes .text {
   position: relative;
