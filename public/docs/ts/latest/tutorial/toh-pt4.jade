@@ -384,7 +384,7 @@ code-example(format="." language="html").
   We stated [earlier](#child-component) that if we injected the parent `AppComponent` `HeroService`
   into the `HeroDetailComponent`, *we must not add a providers array* like the following
   to the  `HeroDetailComponent`.
-+makeExample('toh-4/ts/app/app.component.1.ts', 'providers', 'No! Don\'t do this!')
++makeExample('toh-4/ts/app/app.component.1.ts', 'providers', 'No! Don\'t do this in HeroDetailComponent!')
 :marked
   Why?  Because that tells Angular to create a new instance of the `HeroService` at the `HeroDetailComponent` level.
   The `HeroDetailComponent` doesn't want its *own*  service instance; it wants its *parent's* service instance.
