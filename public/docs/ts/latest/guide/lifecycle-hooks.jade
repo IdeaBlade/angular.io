@@ -55,6 +55,20 @@ include ../../../../_includes/_util-fns
 
   The [live example](/resources/live-examples/lifecycle-hooks/ts/plnkr.html) demonstrates
   these hooks.
+  
+.l-main-section
+:marked
+  ## Other lifecycles
+  
+  The hooks we've seen are not the only ones around. 
+  The router, for instance, also has it's own [router lifecycle hooks](router.html#router-lifecycle-hooks)
+  that allow us to tap into specific moments in route navigation.
+  
+  A parallel can be drawn between `ngOnInit` and `routerOnActivate`. 
+  Both are prefixed so as to avoid collision, and both run right when a component is 'booting' up.
+  
+  3rd party libraries might implement their hooks as well, in order to give us, the developers, more
+  control over how these libraries are used.
 
 :marked
   ## Peek-a-boo
