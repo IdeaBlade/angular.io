@@ -90,12 +90,17 @@ include ../../../../_includes/_util-fns
 :marked
   We'll explore each of these directives in further detail over this chapter.
   Each directive has a parent component that controls an inner component
-  hooking that implements lifecycle hooks.
+  that implements lifecycle hooks. 
+  The parent component also has a log, that the inner component uses to log
+  messages from its hooks.
 
 .l-main-section
 :marked
   ## Peek-a-boo
   The `PeekABooComponent` demonstrates all of the hooks in the same component.
+  
+figure.image-display
+  img(src='/resources/images/devguide/lifecycle-hooks/peek-a-boo.gif' alt="Peek-a-boo")  
 .l-sub-section
   :marked
     Except for `DoCheck`. If our component superseded regular Angular change detection
@@ -107,14 +112,21 @@ include ../../../../_includes/_util-fns
 :marked
   Peek-a-boo is a demo. We'd rarely if ever implement all interfaces like this in real life.
 
-  We look forward to explaining the Peek-a-boo example and the other lifecycle hook examples in
-  an update to this chapter. Meanwhile, please enjoy poking around in the
-  [code](/resources/live-examples/lifecycle-hooks/ts/plnkr.html).
+  We can see most hooks being fired when we initially create the component,
+  followed by content and view checks surrounding `onChanges`, and finally 
+  another set of content and view checks right before `onDestroy`.
+  
+  We now know - because we tested - that these hooks fire in the order they should.
+  We now also know that `afterContentChecked` and `afterViewChecked` fire a *lot* of times.
+  This means that we should keep whatever logic we put on these hooks as lean
+  as possible, since they might be called several times per second!
+
+  Our next examples will focus on each of these hooks.
 
 .l-sub-section
   :marked
     ## Interface optional?
-    The lifecycle interfaces are optional.
+    Our `PeekABooComponent` implements a long list of lifecycle interfaces, but these are actually optional.
     We recommend adding them to benefit from TypeScript's strong typing and editor tooling.
 
     But they disappear from the transpiled JavaScript.
