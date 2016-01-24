@@ -60,16 +60,39 @@ include ../../../../_includes/_util-fns
 :marked
   ## Other lifecycles
   
-  The hooks we've seen are not the only ones around. 
+  The hooks we've listed are not the end-all and be-all of hooks. 
   The router, for instance, also has it's own [router lifecycle hooks](router.html#router-lifecycle-hooks)
   that allow us to tap into specific moments in route navigation.
   
   A parallel can be drawn between `ngOnInit` and `routerOnActivate`. 
   Both are prefixed so as to avoid collision, and both run right when a component is 'booting' up.
   
-  3rd party libraries might implement their hooks as well, in order to give us, the developers, more
+  3rd party libraries might implement their hooks as well in order to give us, the developers, more
   control over how these libraries are used.
 
+.l-main-section
+:marked
+  ## Navigating the live example
+  
+  The live example is fairly complex collection of components spread across 
+  several files, but we need not be daunted by it.
+  
+  Like any other Angular 2 application, we can follow the code to get started.
+  `index.html` tells us that we begin by loading `app/app.boot`. 
+  Opening `app/app.boot.ts` shows the the application is being bootstrapped with
+  `AppComponent`, like most of our other Angular 2 apps.
+  
+  Inside `app.component.ts` we see a few directives in its template together
+  with the directive imports at the top.
+  
++makeExample('lifecycle-hooks/ts/app/app.component.ts')
+    
+:marked
+  We'll explore each of these directives in further detail over this chapter.
+  Each directive has a parent component that controls an inner component
+  hooking that implements lifecycle hooks.
+
+.l-main-section
 :marked
   ## Peek-a-boo
   The `PeekABooComponent` demonstrates all of the hooks in the same component.
@@ -88,17 +111,42 @@ include ../../../../_includes/_util-fns
   an update to this chapter. Meanwhile, please enjoy poking around in the
   [code](/resources/live-examples/lifecycle-hooks/ts/plnkr.html).
 
-  ## Interface optional?
-  The lifecycle interfaces are optional.
-  We recommend adding them to benefit from TypeScript's strong typing and editor tooling.
+.l-sub-section
+  :marked
+    ## Interface optional?
+    The lifecycle interfaces are optional.
+    We recommend adding them to benefit from TypeScript's strong typing and editor tooling.
 
-  But they disappear from the transpiled JavaScript.
-  Angular can't see them at runtime.  And they are useless to someone developing in
-  a language without interfaces (such as pure JavaScript).
+    But they disappear from the transpiled JavaScript.
+    Angular can't see them at runtime.  And they are useless to someone developing in
+    a language without interfaces (such as pure JavaScript).
 
-  Fortunately, they aren't necessary.
-  We don't have to add the lifecycle hook interfaces to our directives and components to benefit from the hooks themselves.
+    Fortunately, they aren't necessary.
+    We don't have to add the lifecycle hook interfaces to our directives and components to benefit from the hooks themselves.
 
-  Angular instead inspects our directive and component classes
-  and calls the hook methods *if they are defined*.
-  Angular will find and call methods like `ngOnInit()`, with or without the interfaces.
+    Angular instead inspects our directive and component classes
+    and calls the hook methods *if they are defined*.
+    Angular will find and call methods like `ngOnInit()`, with or without the interfaces.
+
+.l-main-section
+:marked
+  ## OnChanges
+
+.l-main-section  
+:marked
+  ## AfterView
+
+.l-main-section
+:marked
+  ## AfterContent
+
+.l-main-section
+:marked
+  ## Spy directives
+
+.l-main-section
+:marked
+  ## DoCheck
+  
+  update image on 'navigating the live example after adding this'
+  
