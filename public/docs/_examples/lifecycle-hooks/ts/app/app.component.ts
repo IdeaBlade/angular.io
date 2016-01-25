@@ -8,27 +8,15 @@ import {OnChangesParentComponent} from './on-changes.component';
 import {PeekABooParentComponent} from './peek-a-boo-parent.component';
 import {SpyParentComponent} from './spy.component';
 
-/***************************************/
-/*
-  template: `
-  <peek-a-boo-parent></peek-a-boo-parent>
-  <on-changes-parent></on-changes-parent>
-  <after-view-parent></after-view-parent>
-  <after-content-parent></after-content-parent>
-  <spy-parent></spy-parent>
-  <counter-parent></counter-parent>
-  `,
- */
-
 @Component({
   selector: 'my-app',
   template: `
-  <peek-a-boo-parent></peek-a-boo-parent>
-  <on-changes-parent></on-changes-parent>
-  <after-view-parent></after-view-parent>
-  <after-content-parent></after-content-parent>
-  <spy-parent></spy-parent>
-  <counter-parent></counter-parent>
+    <peek-a-boo-parent></peek-a-boo-parent>
+    <on-changes-parent></on-changes-parent>
+    <after-view-parent></after-view-parent>
+    <after-content-parent></after-content-parent>
+    <spy-parent></spy-parent>
+    <counter-parent></counter-parent>
   `,
   directives: [
     AfterContentParentComponent,

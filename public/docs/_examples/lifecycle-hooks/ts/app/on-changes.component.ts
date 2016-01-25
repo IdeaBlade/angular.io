@@ -31,7 +31,9 @@ export class MyHeroComponent implements OnChanges {
 
   changeLog:string[] = [];
 
+  // #docregion ng-on-changes
   ngOnChanges(changes: {[propertyName: string]: SimpleChange}) {
+  // #enddocregion ng-on-changes
 
     // Empty the changeLog whenever 'reset' property changes
     // hint: this is a way to respond programmatically to external value changes.
@@ -43,7 +45,9 @@ export class MyHeroComponent implements OnChanges {
       let prev = JSON.stringify(prop.previousValue); // first time is {}; after is integer
       this.changeLog.push(`${propName}: currentValue = ${cur}, previousValue = ${prev}`);
     }
+  // #docregion ng-on-changes
   }
+  // #enddocregion ng-on-changes
 }
 
 /***************************************/

@@ -55,10 +55,52 @@ include ../../../../_includes/_util-fns
 
   The [live example](/resources/live-examples/lifecycle-hooks/ts/plnkr.html) demonstrates
   these hooks.
+  
+.l-main-section
+:marked
+  ## Other lifecycles
+  
+  The hooks we've listed are not the end-all and be-all of hooks. 
+  The router, for instance, also has it's own [router lifecycle hooks](router.html#router-lifecycle-hooks)
+  that allow us to tap into specific moments in route navigation.
+  
+  A parallel can be drawn between `ngOnInit` and `routerOnActivate`. 
+  Both are prefixed so as to avoid collision, and both run right when a component is 'booting' up.
+  
+  3rd party libraries might implement their hooks as well in order to give us, the developers, more
+  control over how these libraries are used.
 
+.l-main-section
+:marked
+  ## Navigating the live example
+  
+  The live example is fairly complex collection of components spread across 
+  several files, but we need not be daunted by it.
+  
+  Like any other Angular 2 application, we can follow the code to get started.
+  `index.html` tells us that we begin by loading `app/app.boot`. 
+  Opening `app/app.boot.ts` shows the the application is being bootstrapped with
+  `AppComponent`, like most of our other Angular 2 apps.
+  
+  Inside `app.component.ts` we see a few components in its template together
+  with the their imports at the top.
+  
++makeExample('lifecycle-hooks/ts/app/app.component.ts')
+    
+:marked
+  We'll explore each of these components in further detail over this chapter.
+  Each directive has a parent component that controls an inner component
+  that implements lifecycle hooks. 
+  The parent component also has a log, that the inner component uses to log
+  messages from its hooks.
+
+.l-main-section
 :marked
   ## Peek-a-boo
   The `PeekABooComponent` demonstrates all of the hooks in the same component.
+  
+figure.image-display
+  img(src='/resources/images/devguide/lifecycle-hooks/peek-a-boo.gif' alt="Peek-a-boo")  
 .l-sub-section
   :marked
     Except for `DoCheck`. If our component superseded regular Angular change detection
@@ -70,21 +112,91 @@ include ../../../../_includes/_util-fns
 :marked
   Peek-a-boo is a demo. We'd rarely if ever implement all interfaces like this in real life.
 
-  We look forward to explaining the Peek-a-boo example and the other lifecycle hook examples in
-  an update to this chapter. Meanwhile, please enjoy poking around in the
-  [code](/resources/live-examples/lifecycle-hooks/ts/plnkr.html).
+  We can see most hooks being fired when we initially create the component,
+  followed by content and view checks surrounding `onChanges`, and finally 
+  another set of content and view checks right before `onDestroy`.
+  
+  We now know - because we tested - that these hooks fire in the order they should.
+  We now also know that `afterContentChecked` and `afterViewChecked` fire a *lot* of times.
+  This means that we should keep whatever logic we put on these hooks as lean
+  as possible, since they might be called several times per second!
 
-  ## Interface optional?
-  The lifecycle interfaces are optional.
-  We recommend adding them to benefit from TypeScript's strong typing and editor tooling.
+  Our next examples will focus on each of these hooks.
 
-  But they disappear from the transpiled JavaScript.
-  Angular can't see them at runtime.  And they are useless to someone developing in
-  a language without interfaces (such as pure JavaScript).
+.l-sub-section
+  :marked
+    ## Interface optional?
+    Our `PeekABooComponent` implements a long list of lifecycle interfaces, but these are actually optional.
+    We recommend adding them to benefit from TypeScript's strong typing and editor tooling.
 
-  Fortunately, they aren't necessary.
-  We don't have to add the lifecycle hook interfaces to our directives and components to benefit from the hooks themselves.
+    But they disappear from the transpiled JavaScript.
+    Angular can't see them at runtime.  And they are useless to someone developing in
+    a language without interfaces (such as pure JavaScript).
 
-  Angular instead inspects our directive and component classes
-  and calls the hook methods *if they are defined*.
-  Angular will find and call methods like `ngOnInit()`, with or without the interfaces.
+    Fortunately, they aren't necessary.
+    We don't have to add the lifecycle hook interfaces to our directives and components to benefit from the hooks themselves.
+
+    Angular instead inspects our directive and component classes
+    and calls the hook methods *if they are defined*.
+    Angular will find and call methods like `ngOnInit()`, with or without the interfaces.
+
+.l-main-section
+:marked
+  ## OnChanges
+  
+  The first hook triggered is `ngOnChanges`. 
+  This hook is called whenever any of the inputs for the component (or directive) changes.
+  
+  Inputs for our example directive look like this:
+  
+code-example(language="html").
+  &lt;my-hero [hero]=&quot;hero&quot; [power]=&quot;power&quot; [reset]=&quot;resetTrigger&quot;&gt;&lt;/my-hero&gt;
+  
+:marked
+  Let's see a running example of what happens when these change.
+
+figure.image-display
+  img(src='/resources/images/devguide/lifecycle-hooks/on-changes.gif' alt="OnChanges")    
+  
+:marked
+  Interestingly enough, changing `hero.name` did *not* trigger our hook.
+  It makes sense though: the input property is bound to `hero`, and the `hero` object *itself* did not change. 
+  Only one of its property did.
+  
+  Changing `power` worked exactly as expected though, and we can see that we 
+  have access to both the current value and the previous one.
+  
+  While other hooks have no parameters, `ngOnChanges` has a single parameter: 
+  an object that maps `propertyName` string to a [SimpleChange](../api/core/SimpleChange-class.html) object.
+  
++makeExample('lifecycle-hooks/ts/app/on-changes.component.ts', 'ng-on-changes')
+
+:marked
+  For the last keystroke, this parameters looks like this:
+
+code-example(language="json").  
+  {
+    "power": {
+      "previousValue": "sing a stor",
+      "currentValue": "sing a storm"
+    }
+  }
+
+.l-main-section  
+:marked
+  ## AfterView
+
+.l-main-section
+:marked
+  ## AfterContent
+
+.l-main-section
+:marked
+  ## Spy directives
+
+.l-main-section
+:marked
+  ## DoCheck
+  
+  update image on 'navigating the live example after adding this'
+  
