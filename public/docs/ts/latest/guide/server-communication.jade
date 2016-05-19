@@ -1,5 +1,9 @@
 block includes
   include ../_util-fns
+  - var _Http = 'Http'; // Angular `Http` library name.
+  - var _Angular_Http = 'Angular <code>Http</code>'
+  - var _Angular_http_library = 'Angular <code>http</code> library'
+
 :marked
   [HTTP](https://tools.ietf.org/html/rfc2616) is the primary protocol for browser/server communication.
 .l-sub-section
@@ -16,7 +20,7 @@ block includes
   as we'll learn in this chapter covering:
 
 ul
-  li #[a(href="#http-client") Http client sample overview]
+  li #[a(href="#http-client") HTTP client sample overview]
   li #[a(href="#fetch-data") Fetch data with http.get]
   +ifDocsFor('ts')
     li #[a(href="#rxjs") RxJS Observable of HTTP Responses]
@@ -37,54 +41,54 @@ p.
   #[+liveExampleLink2('run live in a browser', 'server-communication')].
   
 .l-main-section
+h1 Demos
+p  We'll look at the following demos
+ol
+  block demos-list
+    li HTTP client: Tour of Heroes with Observables
+    li HTTP client: Tour of Heroes with #{_Promise}s
+    li JSONP client: Wikipedia to fetch data from a service that doesn't support CORS
+    li JSONP client: Wikipedia using observable operators to reduce server calls
 :marked
-  # Four Demos
-  We'll look at four demos
-  1. Http client: Tour of Heroes with Observables
-  1. Htp client: Tour of Heroes with Promises
-  1. Jsonp client: Wikipedia to fetch data from a service that doesn't support CORS
-  1. Jsonp client: Wikipedia using observable operators to reduce server calls
-  
-  The four are orchestrated by the root `AppComponent`
+  These demos are orchestrated by the root `AppComponent`
 +makeExample('server-communication/ts/app/app.component.ts', null, 'app/app.component.ts')
+
+block rxjs-import
+  :marked
+    There is nothing remarkable here _except_ for the RxJS operators import; 
+    we'll talk about that [below](#rxjs) when we're ready to explore observables. 
 :marked
-  There is nothing remarkable here _except_ for the RxJS operators import; 
-  we'll talk about that [below](#rxjs) when we're ready to explore observables. 
-  
-  First, we have to configure our application to use Angular's server communication facilities.
+  First, we have to configure our application to use server communication facilities.
 
 .l-main-section
-a#http-providers
+h1#http-providers Providing HTTP Services
 :marked
-  # Providing Http Services
-  
-  We use the Angular `Http` client to communicate with a server using a familiar HTTP request/response protocol.
-  
-block http-providers
-  :marked
-    The `Http` client is one of a family of services in the Angular HTTP Library. 
+  We use the !{_Angular_Http} client to communicate with a server using a familiar HTTP request/response protocol.
+  The `!{_Http}` client is one of a family of services in the !{_Angular_http_library}.
+block system-config-of-http
   .l-sub-section
     :marked
-      SystemJS loads the Angular HTTP Library when we import from `@angular/http` 
+      SystemJS loads the Angular `Http` Library when we import from `@angular/http` 
       because we registered that library with SystemJS in the `system.config` file.
+:marked
+    Before we can use the `!{_Http}` client , we'll have to register it as a service provider with the Dependency Injection system.
+.l-sub-section
   :marked
-      Before we can use the `Http` client , we'll have to register these services as providers with the Dependency Injection system.
-  .l-sub-section
-    :marked
-      Learn about providers in the [Dependency Injection](dependency-injection.html) chapter.
-  :marked
-    In this demo, we register them in the `bootstrap` method of `main.ts`.
-  +makeExample('server-communication/ts/app/main.ts', 'v1', 'app/main.ts (v1)')(format='.')
+    Learn about providers in the [Dependency Injection](dependency-injection.html) chapter.
 
+p In this demo, we register providers in the #[code bootstrap] method of #[code #[+adjExPath('app/main.ts')]].
++makeExample('server-communication/ts/app/main.ts', 'v1', 'app/main.ts (v1)')(format='.')
+
+block http-providers
   :marked
     We begin by importing the symbols we need, most of them familiar by now. The newcomer is `HTTP_PROVIDERS`, 
     a collection of service providers from the Angular HTTP library.
  
-    We register providers in the bootstrap method by passing them in an array as the second parameter after the root component.
+    We register HTTP providers in the bootstrap method by passing them in an array as the second parameter after the root component.
 
     ### Why register in *bootstrap*?
     
-    The *bootstrap* method in the *main.ts* file is strange place to register providers.
+    The `bootstrap` method in the `main.ts` file is strange place to register providers.
     We prefer to register application-wide providers in the metadata `providers` array
     of the root `AppComponent` like this:
   +makeExample('server-communication/ts/app/app.component.ts','http-providers')(format='.')
@@ -100,11 +104,12 @@ block http-providers
 .l-main-section
 a#http-client
 :marked
-  # The Tour of Heroes *Http* Client Demo
+  # The Tour of Heroes *HTTP* Client Demo
   
   Our first demo is a mini-version of the [tutorial](../tutorial)'s "Tour of Heroes" (ToH) application.
   This version gets some heroes from the server, displays them in a list, lets us add new heroes, and saves them to the server.
-  
+  We use the !{_Angular_Http} client to communicate via `XMLHttpRequest (XHR)`.
+
   It works like this.
 figure.image-display
   img(src='/resources/images/devguide/server-communication/http-toh.gif' alt="ToH mini app" width="250")
@@ -118,7 +123,7 @@ figure.image-display
   We use a [template reference variable](template-syntax.html#ref-vars), `newHeroName`, to access the 
   value of the input box in the `(click)` event binding.
   When the user clicks the button, we pass that value to the component's `addHero` method and then
-  clear it to make ready for a new hero name.
+  clear it to make it ready for a new hero name.
   
   Below the button is an area for an error message.
 
@@ -129,10 +134,10 @@ a#HeroListComponent
   Here's the component class:
 +makeExample('server-communication/ts/app/toh/hero-list.component.ts','component', 'app/toh/hero-list.component.ts (class)')  
 :marked
-  We [inject](dependency-injection.html) a `HeroService` into the constructors
+  Angular [injects](dependency-injection.html) a `HeroService` into the constructor
   and the component calls that service to fetch and save data.
 
-  The component **does not talk to _Angular's Http_ service!** 
+  The component **does not talk directly to an HTTP service**!
   The component doesn't know or care how we get the data. 
   It delegates to the `HeroService`.
   
@@ -149,7 +154,7 @@ a#HeroListComponent
     (especially calling a remote server) is handled in a separate method.
 block getheroes-and-addhero
   :marked
-    The service's `getHeroes()` and `addHero()` methods return an `Observable` of hero data that the Http client fetched from the server.
+    The service's `getHeroes()` and `addHero()` methods return an `Observable` of hero data that the HTTP client fetched from the server.
     
     *Observables* are a big topic, beyond the scope of this chapter. 
     But we need to know a little about them to appreciate what is going on here.
@@ -160,28 +165,24 @@ block getheroes-and-addhero
     produces a success event (with the hero data in the event payload) or a fail event (with the error in the payload).
 
 :marked
-  With our basic intuitions about the component squared away, we can turn to `HeroService` whose methods return these observables.
+  With our basic intuitions about the component squared away, we can turn to `HeroService`.
 
-l-main-section
-a#fetch-data
+.l-main-section
 a#HeroService
+h2#fetch-data Fetch data with the #[b HeroService]
 :marked
-  ## Fetch data with the *HeroService*
-  
   In many of our previous samples we faked the interaction with the server by
   returning mock heroes in a service like this one:
 +makeExample('toh-4/ts/app/hero.service.ts', 'just-get-heroes')(format=".")
 :marked
-  In this chapter, we get the heroes from the server using Angular's HTTP client service.
-  Here's the http-based `HeroService`: 
+  In this chapter, we get the heroes from the server using the !{_Angular_Http} client service.
+  Here's the HTTP-based `HeroService`: 
 +makeExample('server-communication/ts/app/toh/hero.service.ts', 'v1', 'app/toh/hero.service.ts')
 
-block http-client-service
-  :marked
-    Notice that the Angular `Http` client service is
-    [injected](dependency-injection.html) into the `HeroService` constructor.
-
 :marked
+  Notice that the `!{_Http}` client service is
+  [injected](dependency-injection.html) into the `HeroService` constructor.
+
   Look closely at how we call `#{_priv}http.get`
 +makeExample('server-communication/ts/app/toh/hero.service.ts', 'http-get', 'app/toh/hero.service.ts (getHeroes)')(format=".")
 :marked
@@ -405,7 +406,7 @@ block hero-list-comp-add-hero
   :marked
     Back in the `HeroListComponent`, we see that *its* `addHero()` method subscribes to the observable returned by the *service's* `addHero()` method.
     When the data arrive it pushes the new hero object into its `heroes` array for presentation to the user.
-  +makeExample('server-communication/ts/app/toh/hero-list.component.ts', 'addHero', 'app/toh/hero-list.component.ts (addHero)')(format=".")
++makeExample('server-communication/ts/app/toh/hero-list.component.ts', 'addHero', 'app/toh/hero-list.component.ts (addHero)')(format=".")
 
 block promises
   a#promises
@@ -687,8 +688,7 @@ block redirect-to-web-api
     the in-memory web API service using standard Angular provider registration techniques. 
     We initialize the in-memory web API with *seed data* from the mock hero dataset at the same time.
 
-    Here is the revised (and final) version of the `main.ts` demonstrating these steps.
-  +makeExample('server-communication/ts/app/main.ts', 'final', 'main.ts (final)')(format=".")
-  :marked
+p Here is the revised (and final) version of the #[code #[+adjExPath('app/main.ts')]] demonstrating these steps.
++makeExample('server-communication/ts/app/main.ts', 'final', 'main.ts (final)')(format=".")
 
 p See the full source code in the #[+liveExampleLink2('live example', 'server-communication')].

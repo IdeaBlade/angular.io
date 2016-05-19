@@ -57,6 +57,7 @@ class HeroService {
 
   Exception _handleError(dynamic e) {
     // In a real world app, we might use a remote logging infrastructure
+    // We'd also dig deeper into the error to get a better message
     print(e); // log to console instead
     return new Exception('Server error; cause: $e');
   }

@@ -25,12 +25,11 @@ import { provide }           from '@angular/core';
 import { XHRBackend }        from '@angular/http';
 
 // #enddocregion in-mem-web-api-imports
-// #enddocregion in-mem-web-api-providers
+// #docregion in-mem-web-api-providers
 bootstrap(AppComponent, [
    // HTTP providers and the in-memory web api provider replacements
     HTTP_PROVIDERS,
     provide(XHRBackend, { useClass: InMemoryBackendService }), // in-mem server
     provide(SEED_DATA,  { useClass: HeroData }) // in-mem server data
 ]);
-// #enddocregion in-mem-web-api-providers
-// #enddocregion final
+// #enddocregion final, in-mem-web-api-providers
