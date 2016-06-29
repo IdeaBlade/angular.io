@@ -5,6 +5,7 @@ import { ROUTER_DIRECTIVES }  from '@angular/router';
 
 import { DialogService }  from './dialog.service';
 import { HeroService }    from './heroes/hero.service';
+import { APP_COMPONENTS } from './app.routes';
 
 @Component({
   selector: 'my-app',
@@ -24,7 +25,8 @@ import { HeroService }    from './heroes/hero.service';
     HeroService,
     DialogService
   ],
-  directives: [ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES],
+  precompile: [APP_COMPONENTS]
 })
 export class AppComponent {
 }

@@ -7,14 +7,14 @@ import { provideRouter, RouterConfig } from '@angular/router';
 // #enddocregion
 
 // #docregion base-routes
-import { HeroListComponent } from './hero-list.component';
-import { CrisisCenterComponent } from './crisis-center/crisis-center.component';
-import { HeroDetailComponent } from './heroes/hero-detail.component';
+import { CrisisCenterComponent }  from './crisis-center/crisis-center.component';
+import { HeroDetailComponent }    from './heroes/hero-detail.component';
+import { HeroListComponent }      from './hero-list.component';
 // #enddocregion base-routes
 
 // #docregion
 // #docregion route-config
-export const routes: RouterConfig = [
+const APP_ROUTES: RouterConfig = [
   // #docregion route-defs
   { path: 'crisis-center', component: CrisisCenterComponent },
   { path: 'heroes', component: HeroListComponent },
@@ -25,7 +25,13 @@ export const routes: RouterConfig = [
 ];
 
 export const APP_ROUTER_PROVIDERS = [
-  provideRouter(routes)
+  provideRouter(APP_ROUTES)
+];
+
+export const APP_COMPONENTS = [
+  CrisisCenterComponent,
+  HeroDetailComponent,
+  HeroListComponent
 ];
 // #enddocregion route-config
 // #enddocregion

@@ -8,8 +8,6 @@ import 'rxjs/add/observable/fromPromise';
 import { Crisis, CrisisService } from './crisis.service';
 import { DialogService } from '../dialog.service';
 
-
-
 @Component({
   // #docregion template
   template: `

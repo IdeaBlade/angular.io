@@ -50,7 +50,7 @@ include ../_util-fns
   * [redirecting](#redirect) from one route to another
   * confirming or canceling navigation with [guards](#guards)
     * [CanActivate](#can-activate-guard) to prevent navigation to a route
-    * [CanDeactivate](#can-deactivate-deactivate) to prevent navigation away from the current route
+    * [CanDeactivate](#can-deactivate-guard) to prevent navigation away from the current route
   * passing optional information in [query parameters](#query-parameters)
   * choosing the "HTML5" or "hash" [URL style](#browser-url-styles)
 
@@ -585,7 +585,7 @@ figure.image-display
   We use the same techniques we learned for `app.routes.ts`.
 
   We import the two components from their new locations in the `app/heroes/` folder, define the two hero routes.
-  and add them to an exported `HeroesRoutes` array.
+  and add them to an exported `HEROES_ROUTES` array.
 
   ### Route definition with a parameter
   The route to `HeroDetailComponent` has a twist.
@@ -619,9 +619,9 @@ h3#merge-hero-routes Merge hero routes into application routes
   Update `app.routes.ts` as follows:
 +makeExample('router/ts/app/app.routes.3.ts', '', 'app/app.routes.ts (v.2)')(format=".")
 :marked
-  We replace the `HeroListComponent` import with an `HeroesRoutes` import.
+  We replace the `HeroListComponent` import with an `HEROES_ROUTES` import.
 
-  We *flatten* the `HeroesRoutes` into the `routes` array with the ES6 *spread operator* (`...`).
+  We *flatten* the `HEROES_ROUTES` into the `APP_ROUTES` array with the ES6 *spread operator* (`...`).
 
   As a result, the `app.routes.ts` no longer has specific knowledge of the hero feature, its components, or its route details.
   It won't change as we evolve the hero feature with more components and different routes.
@@ -897,7 +897,7 @@ h3#child-routing-component Child Routing Component
 :marked
   ### Service isolation
 
-  The`CrisisService` is neither needed nor wanted outside the *Crisis Center* domain.
+  The `CrisisService` is neither needed nor wanted outside the *Crisis Center* domain.
   Instead of registering it with the root `AppComponent` providers &mdash;
   which makes it visible everywhere &mdash;
   we register the `CrisisService` in the component's providers array.
@@ -986,8 +986,8 @@ code-example(format="").
 
 :marked
   Since we only want to redirect when our path specifically matches `''`, we've added an extra configuration
-  to our route using `terminal: true`. Mainly for redirects, the `terminal` property gives us more control over
-  when the router should continue matching our URL against our defined routes.
+  to our route using `pathMatch: 'full'`. Mainly for redirects, the `pathMatch` property gives us more control over
+  the matching strategy used by the router to find matching routes whether it be with a partial or full path match.
 
 .l-sub-section
   :marked

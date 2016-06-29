@@ -8,12 +8,17 @@ import { CrisisListComponent }  from './crisis-list.component';
 import { HeroListComponent }    from './hero-list.component';
 
 // #docregion route-config
-export const routes: RouterConfig = [
+const APP_ROUTES: RouterConfig = [
   { path: 'crisis-center', component: CrisisListComponent },
   { path: 'heroes', component: HeroListComponent }
 ];
 
 export const APP_ROUTER_PROVIDERS = [
-  provideRouter(routes)
+  provideRouter(APP_ROUTES)
+];
+
+export const APP_COMPONENTS = [
+  CrisisListComponent,
+  HeroListComponent
 ];
 // #enddocregion route-config

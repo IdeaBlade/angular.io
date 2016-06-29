@@ -8,11 +8,11 @@ import { CrisisAdminComponent }  from './crisis-admin.component';
 
 import { CanDeactivateGuard }    from '../interfaces';
 
-export const CrisisCenterRoutes: RouterConfig = [
+export const CRISIS_CENTER_ROUTES: RouterConfig = [
   {
     path: '',
-    redirectTo: '/crisis-center',
-    terminal: true
+    pathMatch: 'full',
+    redirectTo: '/crisis-center'
   },
   {
     path: 'crisis-center',

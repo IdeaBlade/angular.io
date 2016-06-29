@@ -37,7 +37,7 @@ export class CrisisDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private dialogService: DialogService
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.sub = this.route

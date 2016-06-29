@@ -5,6 +5,9 @@ import { Component } from '@angular/core';
 // #docregion import-router
 import { ROUTER_DIRECTIVES } from '@angular/router';
 // #enddocregion import-router
+// #docregion import-app-precompile
+import { APP_COMPONENTS } from './app.routes';
+// #enddocregion import-app-precompile
 
 @Component({
   selector: 'my-app',
@@ -21,6 +24,9 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
   // #docregion directives
   directives: [ROUTER_DIRECTIVES]
   // #enddocregion directives
+  // #docregion precompile
+  precompile: [APP_COMPONENTS]
+  // #enddocregion precompile
 })
 
 export class AppComponent { }

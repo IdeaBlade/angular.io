@@ -1,6 +1,14 @@
 import { Component }            from '@angular/core';
 import { ROUTER_DIRECTIVES }    from '@angular/router';
 
+// #docregion precompile
+import { CrisisDetailComponent } from './crisis-detail.component';
+import { CrisisListComponent }   from './crisis-list.component';
+// #enddocregion precompile
+// #docregion precompile-admin
+import { CrisisAdminComponent }  from './crisis-admin.component';
+// #enddocregion precompile-admin
+
 import { CrisisService }        from './crisis.service';
 
 // #docregion minus-imports
@@ -11,8 +19,16 @@ import { CrisisService }        from './crisis.service';
   `,
   directives: [ROUTER_DIRECTIVES],
 // #docregion providers
-  providers:  [CrisisService]
+  providers:  [CrisisService],
 // #enddocregion providers
+// #docregion precompile, precompile-admin
+  precompile: [
+    CrisisDetailComponent,
+    CrisisListComponent,
+    // #enddocregion precompile
+  ]
+// #docregion precompile
+// #enddocregion precompile, precompile-admin
 })
 export class CrisisCenterComponent { }
 // #enddocregion  minus-imports

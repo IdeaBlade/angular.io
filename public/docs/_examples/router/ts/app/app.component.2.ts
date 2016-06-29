@@ -2,9 +2,9 @@
 // #docplaster
 
 // #docregion
-import { Component }                 from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-
+import { Component }          from '@angular/core';
+import { ROUTER_DIRECTIVES }  from '@angular/router';
+import { APP_COMPONENTS }     from './app.routes';
 // #enddocregion
 /*
  // Apparent Milestone 2 imports
@@ -31,7 +31,8 @@ import { HeroService }           from './heroes/hero.service';
     <router-outlet></router-outlet>
   `,
   providers:  [HeroService],
-  directives: [ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES],
+  precompile: [APP_COMPONENTS]
 })
 // #enddocregion
 export class AppComponent {

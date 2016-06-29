@@ -1,6 +1,7 @@
 // #docregion
 import { Component }          from '@angular/core';
 import { ROUTER_DIRECTIVES }  from '@angular/router';
+import { APP_COMPONENTS }     from './app.routes';
 
 import { DialogService }  from './dialog.service';
 import { HeroService }    from './heroes/hero.service';
@@ -22,7 +23,8 @@ import { HeroService }    from './heroes/hero.service';
     HeroService,
     DialogService
   ],
-  directives: [ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES],
+  precompile: [APP_COMPONENTS]
 })
 export class AppComponent {
 }

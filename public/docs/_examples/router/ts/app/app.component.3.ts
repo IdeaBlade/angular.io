@@ -1,7 +1,8 @@
 /* tslint:disable:no-unused-variable */
 // #docplaster
-import { Component } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { Component }                  from '@angular/core';
+import { Router, ROUTER_DIRECTIVES }  from '@angular/router';
+import { APP_COMPONENTS }             from './app.routes';
 
 import { HeroService }           from './heroes/hero.service';
 
@@ -43,7 +44,8 @@ import { HeroService }           from './heroes/hero.service';
   `,
 // #enddocregion template
   providers:  [HeroService],
-  directives: [ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES],
+  precompile: [APP_COMPONENTS]
 })
 export class AppComponent {
 }
