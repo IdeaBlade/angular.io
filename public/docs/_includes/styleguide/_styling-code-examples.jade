@@ -1,0 +1,90 @@
+include ../../../_includes/_util-fns
+
+//- next line is needed whenever calling makeXXX mixin from within a partial
+- current.pathToDocs = "../../";
+
+#sg-code.showcase.shadow-1
+  header.showcase-header
+    h2 Style Examples
+    p Align documentation example styles across examples.
+    
+  .showcase-content
+    :marked
+      ### Include the standard style sheet in your HTML.
+    
+      The provides stylesheet (`a2docs.css`) contains a powerful selection of styles than can be used in your examples. These styles
+      conform to the `Documentation Style Guide`. Use the minimal amount of styles required for the complexity of
+      your code example.
+    
+      Include this in each example HTML:
+    
+    - var stylePattern = { pnk: /link (rel=.*&quot;)/g};
+    +makeExample('styleguide/js/index.html', null, 'index.html', stylePattern )    
+    
+    :marked
+      ### Link the `Roboto` webfont in your HTML.
+      
+    - var stylePattern = { pnk: /link (href=.*&quot;)/g};
+    +makeExample('styleguide/js/index.html', null, 'index.html', stylePattern )
+
+    :marked
+      ### Deviating styles
+      
+      When deviating style or alternate are required in an example for functional reasons, it should be 
+      implemented as component specific styles.
+      
+    +makeExample('styleguide/ts/app/styled.component.ts', null, 'styled.component.ts')  
+    
+    :marked
+      ### Layout
+      
+      The `a2docs.css` file is based on the `Bootstrap CSS` styling framework. This is purely to fascilitate easy
+      styling of the examples and does not represent a recommendation to use this styling framework over others.
+      
+      The `Bootstrap Grid System` is included and should when your examples require page layouts beyond those provided 
+      natively by the browsers themselves.
+      
+      You can learn how to use this by reading about the [Bootstrap Grid](http://getbootstrap.com/css/#grid). 
+
+    :marked
+      ### Other Bootstrap styles
+      
+      To make styling easy, the following `Bootstrap CSS` elements have also been included in `a2docs.css`. It is 
+      recommended to only use the absolute minimum in styling features required to illustrate your example.
+      
+      With the exception of `form controls` and `buttons` where it is recommended to apply these styles to achieve
+      a uniform look and feel across examples.
+      
+      - [Tables](http://getbootstrap.com/css/#tables)
+      - [Forms](http://getbootstrap.com/css/#forms)
+      - [Input Groups](http://getbootstrap.com/components/#input-groups)
+      - [Buttons](http://getbootstrap.com/css/#buttons)
+      - [Button Groups](http://getbootstrap.com/components/#btn-groups)
+      - [Glyphicons](http://getbootstrap.com/components/#glyphicons)
+      - [Alerts](http://getbootstrap.com/components/#alerts)
+      
+    .alert.is-important.
+      Buttons and Data Input Elements SHOULD ideally be styled using the class="btn btn-primary" classes for buttons
+      and class="form-control" class for input elements. This is to ensure a uniform visual and interactive experience
+      across examples.   
+      
+    :marked
+      ### General styling for all examples
+      
+      The `a2docs.css` contains a carefully selected set of styles, colors and fonts. Please use these in all cases,
+      unless a deviation is necessary to illustrate a specific example topic. When deviating please stay as close
+      to these styles as possible.
+      
+      Correct font sizes and weights are automatically applied to all common elements.
+      
+    :marked
+      ### Container boxes for example separation
+      Container boxes, similar to those used in this document, can be created to describe and outline specific example 
+      sets inside example pages housing more than one discrete example.
+    
+    - var stylePattern = { pnk: /div (class=.*&quot;)/g};  
+    +makeExample('styleguide/ts/app/container-boxes.component.html', null, 'container-boxes.component.html',stylePattern)   
+      
+      
+      
+       
