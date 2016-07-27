@@ -21,13 +21,7 @@ import { WikiSmartComponent } from './wiki/wiki-smart.component';
     <my-wiki></my-wiki>
     <my-wiki-smart></my-wiki-smart>
   `,
-// #enddocregion
-/*
-// #docregion http-providers
-  providers: [ HTTP_PROVIDERS ]
-// #enddocregion http-providers
-*/
-// #docregion
+
   directives: [
     HeroListComponent, HeroListPromiseComponent,
     WikiComponent, WikiSmartComponent

@@ -86,7 +86,7 @@ export class DoCheckComponent implements DoCheck, OnChanges {
 
 @Component({
   selector: 'do-check-parent',
-  templateUrl: 'app/on-changes-parent.component.html',
+  templateUrl: 'app/do-check-parent.component.html',
   styles: ['.parent {background: Lavender}'],
   directives: [DoCheckComponent]
 })

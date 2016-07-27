@@ -47,13 +47,13 @@ include ../_util-fns
   * navigating under [program control](#navigate)
   * toggling css classes for the [active router link](#router-link-active)
   * embedding critical information in the URL with [route parameters](#route-parameters)
+  * providing non-critical information in [optional route parameters](#optional-route-parameters)
   * add [child routes](#child-routing-component) under a feature section
   * [redirecting](#redirect) from one route to another
   * confirming or canceling navigation with [guards](#guards)
     * [CanActivate](#can-activate-guard) to prevent navigation to a route
     * [CanDeactivate](#can-deactivate-guard) to prevent navigation away from the current route
-  * passing optional information in [query parameters](#query-parameters)
-  * persisting information across routes with [global query parameters](#global-query-parameters)
+  * providing optional information across routes with [query parameters](#query-parameters)
   * jumping to anchor elements using a [fragment](#fragment)
   * choosing the "HTML5" or "hash" [URL style](#browser-url-styles)
 
@@ -83,7 +83,7 @@ include ../_util-fns
   It is not part of the Angular 2 core. It is in its own library package, `@angular/router`.
   We import what we need from it as we would from any other Angular package.
 
-+makeExample('router/ts/app/app.component.1.ts','import-router', 'app/app.component.ts (import)')(format=".")
++makeExample('router/ts/app/main.1.ts','import-router', 'app/main.ts (import)')(format=".")
 .l-sub-section
   :marked
     We cover other options in the [details below](#browser-url-styles).
@@ -93,7 +93,7 @@ include ../_util-fns
   from which it can determine the component to display.
 
   A router has no routes until we configure it.
-  The preferred way is to bootstrap our application with an array of routes using the **`provideRouter`** function.
+  We bootstrap our application with an array of routes that we'll provide to our **`RouterModule.forRoot`** function.
 
   In the following example, we configure our application with four route definitions.
 +makeExample('router/ts/app/app.routes.1.ts','route-config','app/app.routes.ts')(format='.')
@@ -115,14 +115,14 @@ include ../_util-fns
     if the URL requested doesn't match any paths for routes defined in our configuration. This is useful for
     displaying a 404 page or redirecting to another route.
 
-    We pass the configuration array to the `provideRouter()` function which returns
-    (among other things) a configured *Router* [service provider](dependency-injection.html#!#injector-providers).
+:marked
+    We export the configuration array so we can import it into our `main.ts` file where we'll provide
+    a configured *Router* module.
 
-    Finally, we export this provider in the `appRouterProviders` array
-    so we can simplify registration of router dependencies later in `main.ts`.
+    So we can simplify registration of router dependencies later in `main.ts`, well export any empty array of `appRouterProviders`.
     We don't have any other providers to register right now. But we will.
 :marked
-  Next we open `main.ts` where we must register our router providers in the `bootstrap` method.
+  Next we open `main.ts` where we must register our router module and application router providers in the second argument of the `bootstrap` method.
 +makeExample('router/ts/app/main.ts','','app/main.ts')(format='.')
 :marked
   ### Router Outlet
@@ -172,7 +172,7 @@ code-example(format="", language="html").
 
   The router state provides us with methods to traverse up and down the route tree from any activated route
   to get information we may need from parent, child and sibling routes. It also contains the URL *fragment*
-  and *query parameters* which are **global** to all routes. We'll use the `RouterState` to access
+  and *query parameters* which are available to all routes. We'll use the `RouterState` to access
   [Query Parameters](#query-parameters).
 
 :marked
@@ -192,6 +192,11 @@ table
     td.
       Displays the application component for the active URL.
       Manages navigation from one component to the next.
+  tr
+    td <code>RouterModule</code>
+    td.
+      A separate Angular module that provides the necessary service providers
+      for navigation through application views.
   tr
     td <code>RouterConfig</code>
     td.
@@ -416,18 +421,6 @@ h4#define-routes Define routes
   the `CrisisListComponent`, display its view, and update the browser's address location and history with the URL
   for that path.*
 
-h4#provideRouter Call <i>provideRouter</i>
-:marked
-  We pass the route configuration to the `provideRouter` function which returns an array containing the configured
-  `Router` service provider ... and some other, unseen providers that the routing library requires.
-
-:marked
-  We add the `provideRouter` array to an `appRouterProviders` array and export it.
-
-  We could add *additional* service providers to `appRouterProviders` &mdash;
-  providers that are specific to our routing configuration.
-  We don't have any yet. We will have some later in this chapter.
-
 .l-sub-section
   :marked
     Learn about *providers* in the [Dependency Injection](dependency-injection.html#!#injector-providers) chapter.
@@ -435,17 +428,17 @@ h4#provideRouter Call <i>provideRouter</i>
 h4#register-providers Register routing in bootstrap
 :marked
   Our app launches from the `main.ts` file in the `/app` folder.
-  It's short and not much different from the default `main.ts`.
 
-  The important difference: we import the `appRouterProviders` array
-  and pass it as the second parameter of the `bootstrap` function.
+  We import the route configuration and pass it to the `RouterModule.forRoot` function
+  which returns an array containing the configured `Router` service provider ... and some other,
+  unseen providers that the routing library requires. The configured `RouterModule` is added to the
+  second parameter of the `bootstrap` function in the `imports` array.
+
+  We also import the `appRouterProviders` array and add it to the second parameter
+  of the `bootstrap` function in the `providers` array.
 +makeExample('router/ts/app/main.1.ts','all', 'main.ts')(format=".")
 :marked
-  Providing the router providers at bootstrap makes the Router available everywhere in our application.
-.alert.is-important
-  :marked
-    We must register router providers in `bootstrap`.
-    We cannot wait to do it in `AppComponent`.
+  Providing the router module at bootstrap makes the Router available everywhere in our application.
 
 h3#shell The <i>AppComponent</i> shell
 :marked
@@ -519,7 +512,7 @@ h3#router-directives <i>ROUTER_DIRECTIVES</i>
   * load the router library
   * add a nav bar to the shell template with anchor tags, `routerLink`  and `routerLinkActive` directives
   * added a `router-outlet` to the shell template where views will be displayed
-  * configure the router with `provideRouter`
+  * configure the router module with `RouterModule.forRoot`
   * set the router to compose "HTML 5" browser URLs.
 
   The rest of the starter app is mundane, with little interest from a router perspective.
@@ -657,13 +650,13 @@ code-example(format="." language="bash").
   pattern and go to the same "Magneta" detail view.
 .l-sub-section
   :marked
-    #### Route parameter or query parameter?
+    #### Route parameter: Required or optional?
     Embedding the route parameter token, `:id`, in the route definition path is a good choice for our scenario
     because the `id` is *required* by the `HeroDetailComponent` and because
     the value `15` in the path clearly distinguishes the route to "Magneta" from
     a route for some other hero.
 
-    A [query parameter](#query-parameter) might be a better choice if we were passing an *optional* value to `HeroDetailComponent`.
+    An [optional-route-parameter](#optional-route-parameter) might be a better choice if we were passing an *optional* value to `HeroDetailComponent`.
 
 h3#merge-hero-routes Merge hero routes into application routes
 :marked
@@ -1202,7 +1195,7 @@ h3#can-activate-guard <i>CanActivate</i>: requiring authentication
   There is nothing new about this component or the way we wire it into the router configuration.
   Here is the pertinent code, offered without comment:
 +makeTabs(
-   `router/ts/app/login.component.ts,
+   `router/ts/app/login.component.1.ts,
    router/ts/app/login.routes.ts,
    router/ts/app/app.routes.5.ts
   `,
@@ -1332,13 +1325,12 @@ h3#can-deactivate-guard <i>CanDeactivate</i>: handling unsaved changes
   `)
 
 
-<a id="query-parameters"></a>
-<a id="query-parameter"></a>
+<a id="optional-route-parameters"></a>
 .l-main-section
 :marked
-  ## Milestone #4: Query Parameters
+  ## Milestone #4: Route Parameters
 
-  We use [*route parameters*](#route-parameters) to specify a *required* parameterized value *within* the route URL
+  We use [*route parameters*](#route-parameters) to specify a *required* parameter value *within* the route URL
   as we do when navigating to the `HeroDetailComponent` in order to view-and-edit the hero with *id:15*.
 code-example(format="." language="bash").
   localhost:3000/hero/15
@@ -1359,24 +1351,21 @@ figure.image-display
   These kinds of parameters don't fit easily in a URL *path*. Even if we could define a suitable URL token scheme,
   doing so greatly complicates the pattern matching required to translate an incoming URL to a named route.
 
-  The **URL query string** is the ideal vehicle for conveying arbitrarily complex information during navigation.
-  The query string isn't involved in pattern matching and affords enormous flexiblity of expression.
-  Almost anything serializable can appear in a query string.
+  Optional parameters are the ideal vehicle for conveying arbitrarily complex information during navigation.
+  Optional parameters aren't involved in pattern matching and affords enormous flexibility of expression.
 
-  The Component Router supports navigation with query strings as well as route parameters.
-  We define _optional_ query string parameters in an *object* after we define our required route parameters.
+  The Component Router supports navigation with optional parameters as well as required route parameters.
+  We define _optional_ parameters in an *object* after we define our required route parameters.
 
-  <a id="route-or-query-parameter"></a>
-  ### Route Parameters or Query Parameters?
+  ### Route Parameters: Required or Optional?
 
   There is no hard-and-fast rule. In general,
 
-  *prefer a route parameter when*
+  *prefer a required route parameter when*
   * the value is required.
   * the value is necessary to distinguish one route path from another.
 
-  *prefer a query parameter when*
-  * the value is optional.
+  *prefer an optional parameter when*
   * the value is complex and/or multi-variate.
 
   <a id="route-parameters-object"></a>
@@ -1387,7 +1376,7 @@ figure.image-display
 +makeExample('router/ts/app/heroes/hero-list.component.1.ts','link-parameters-array')(format=".")
 :marked
   The router embedded the `id` value in the navigation URL because we had defined it
-  as a route parameter with an  `:id` placeholder token in the route `path`:
+  as a route parameter with an `:id` placeholder token in the route `path`:
 +makeExample('router/ts/app/heroes/heroes.routes.ts','hero-detail-route')(format=".")
 :marked
   When the user clicks the back button, the `HeroDetailComponent` constructs another *link parameters array*
@@ -1416,10 +1405,10 @@ figure.image-display
 code-example(format="." language="bash").
   localhost:3000/heroes;id=15;foo=foo
 :marked
-  The `id` value appears in the query string (`;id=15;foo=foo`), not in the URL path.
+  The `id` value appears in the URL as (`;id=15;foo=foo`), not in the URL path.
   The path for the "Heroes" route doesn't have an `:id` token.
 :marked
-  The query string parameters are not separated by "?" and "&".
+  The optional route parameters are not separated by "?" and "&".
   They are **separated by semicolons (;)**
   This is *matrix URL* notation &mdash; something we may not have seen before.
 .l-sub-section
@@ -1436,7 +1425,7 @@ code-example(format="." language="bash").
     as this one can.
 
 :marked
-  ### Query parameters in the *ActivatedRoute* service
+  ### Route parameters in the *ActivatedRoute* service
 
   The list of heroes is unchanged. No hero row is highlighted.
 
@@ -1478,19 +1467,16 @@ code-example(format="." language="bash").
 figure.image-display
   img(src='/resources/images/devguide/router/selected-hero.png' alt="Selected List" )
 :marked
-  The `foo` query string parameter is harmless and continues to be ignored.
+  The optional `foo` route parameter is harmless and continues to be ignored.
 
-<a id="global-query-parameters"></a>
+<a id="query-parameters"></a>
 <a id="fragment"></a>
 :marked
-  ### Global Query parameters and Fragments
+  ### Query Parameters and Fragments
 :marked
-  In our [query parameters](#query-parameters) example, we only dealt with parameters specific to
+  In our [route parameters](#optional-route-parameters) example, we only dealt with parameters specific to
   our route, but what if we wanted optional parameters available to all routes? This is where our
   query parameters come into play and serve a special purpose in our application.
-
-  Traditional query string parameters (?name=value) **persist** across route navigations. This means we can pass these query params
-  around without having to specify them in each navigation method whether it be declaratively or imperatively.
 
   [Fragments](https://en.wikipedia.org/wiki/Fragment_identifier) refer to certain elements on the page
   identified with an `id` attribute.
@@ -1499,16 +1485,25 @@ figure.image-display
 
   We'll also provide an arbitrary `anchor` fragment, which we would use to jump to a certain point on our page.
 
-  We'll add the extra navigation object to our `router.navigate` method that navigates us to our `/login` route.
+  We'll add the `NavigationExtras` object to our `router.navigate` method that navigates us to our `/login` route.
 +makeExample('router/ts/app/auth-guard.service.ts','', 'auth-guard.service.ts (v.3)')
+
 :marked
-  Since we'll be navigating to our *Crisis Admin* route after logging in, we'll update it to handle our global
+  We can also **preserve** query parameters and fragments across navigations without having to re-provide them
+  when navigating. In our `LoginComponent`, we'll add an *object* as the second argument in our `router.navigate` function
+  and provide the `preserveQueryParams` and `preserveFragment` to pass along the current query parameters
+  and fragment to the next route.
+
++makeExample('router/ts/app/login.component.ts','preserve', 'login.component.ts (preserved)')(format=".")
+
+:marked
+  Since we'll be navigating to our *Crisis Admin* route after logging in, we'll update it to handle our
   query parameters and fragment.
 
 +makeExample('router/ts/app/crisis-center/crisis-admin.component.ts','', 'crisis-admin.component.ts (v.2)')
 :marked
   *Query Parameters* and *Fragments* are available through the `routerState` property in our `Router` service.
-  Just like our *route parameters*, global query parameters and fragments are provided as an `Observable`.
+  Just like our *route parameters*, query parameters and fragments are provided as an `Observable`.
   For our updated *Crisis Admin* component we'll feed the `Observable` directly into our template using the `AsyncPipe`, which
   will handle _unsubscribing_ from the `Observable` for us when the component is destroyed.
 
@@ -1521,7 +1516,7 @@ figure.image-display
   Following the steps in this process, we can click on the *Crisis Admin* button, that takes us to the *Login*
   page with our provided `query params` and `fragment`. After we click the login button, we notice that
   we have been redirected to the `Crisis Admin` page with our `query params` and `fragment` still intact. We can use
-  these persistent bits of information for things that need to be provided with every page interaction like
+  these persistent bits of information for things that need to be provided with across pages interaction like
   authentication tokens or session ids.
 
 <a id="final-app"></a>
@@ -1549,7 +1544,7 @@ figure.image-display
 
   A link parameters array holds the ingredients for router navigation:
   * the *path* of the route to the destination component
-  * required route parameters and optional query parameters that go into the route URL
+  * required and optional route parameters that go into the route URL
 
   We can bind the `RouterLink` directive to such an array like this:
 +makeExample('router/ts/app/app.component.3.ts', 'h-anchor')(format=".")
@@ -1557,7 +1552,7 @@ figure.image-display
   We've written a two element array when specifying a route parameter like this
 +makeExample('router/ts/app/heroes/hero-list.component.1.ts', 'nav-to-detail')(format=".")
 :marked
-  We can provide optional query parameters in an object like this:
+  We can provide optional route parameters in an object like this:
 +makeExample('router/ts/app/app.component.3.ts', 'cc-query-params')(format=".")
 :marked
   These three examples cover our needs for an app with one level routing.
@@ -1656,7 +1651,7 @@ code-example(format=".", language="bash").
   1. `PathLocationStrategy` - the default "HTML 5 pushState" style.
   1. `HashLocationStrategy` - the "hash URL" style.
 
-  The router's `provideRouter` function sets the `LocationStrategy` to the `PathLocationStrategy`,
+  The `RouterModule.forRoot` function sets the `LocationStrategy` to the `PathLocationStrategy`,
   making it the default strategy.
   We can switch to the `HashLocationStrategy` with an override during the bootstrapping process if we prefer it.
 .l-sub-section
@@ -1714,11 +1709,6 @@ code-example(format=".", language="bash").
 :marked
   ### *HashLocationStrategy*
   We can go old-school with the `HashLocationStrategy` by
-  providing it as the router's `LocationStrategy` during application bootstrapping.
-
-  First, import the `provide` symbol for Dependency Injection and the
-  `Location` and `HashLocationStrategy` symbols from the router.
-
-  Then *override* the default strategy defined in `provideRouter` by
-  providing the `HashLocationStrategy` later in the `AppComponent` providers array argument:
+  providing the `useHash: true` in an object as the second argument of the `RouterModule.forRoot`
+  during application bootstrapping.
 +makeExample('router/ts/app/main.2.ts','', 'main.ts (hash URL strategy)')

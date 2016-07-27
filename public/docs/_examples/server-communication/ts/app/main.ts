@@ -10,20 +10,27 @@ import { HeroData }   from './hero-data';
 // The usual bootstrapping imports
 // #docregion v1
 import { bootstrap }      from '@angular/platform-browser-dynamic';
-import { HTTP_PROVIDERS } from '@angular/http';
+import { FormsModule }    from '@angular/forms';
+
+import { HttpModule,
+         JsonpModule }    from '@angular/http';
 
 import { AppComponent }   from './app.component';
 
 // #enddocregion v1, final
 /*
 // #docregion v1
-bootstrap(AppComponent, [ HTTP_PROVIDERS ]);
+bootstrap(AppComponent, {
+  imports: [FormsModule, HttpModule, JsonpModule]
+});
 // #enddocregion v1
  */
 // #docregion final
-bootstrap(AppComponent, [
-    HTTP_PROVIDERS,
+bootstrap(AppComponent, {
+  imports:   [FormsModule, HttpModule, JsonpModule],
+  providers: [
     { provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
     { provide: SEED_DATA,  useClass: HeroData }                // in-mem server data
-]);
+  ]
+});
 // #enddocregion final

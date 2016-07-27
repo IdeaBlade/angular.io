@@ -32,6 +32,7 @@
       this.label.activate();
     }
   });
+  app.HeroQueriesComponent = HeroComponent;
   // #enddocregion content
 
   // #docregion view

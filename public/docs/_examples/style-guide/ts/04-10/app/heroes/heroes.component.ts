@@ -7,8 +7,6 @@ import {
   CONFIG,
   EntityService,
   ExceptionService,
-  FilterTextComponent,
-  InitCapsPipe,
   SpinnerService,
   ToastService
 } from '../shared';
@@ -17,8 +15,6 @@ import {
   // #enddocregion example
   moduleId: module.id,
   providers: [EntityService, ExceptionService, SpinnerService, ToastService],
-  directives: [FilterTextComponent],
-  pipes: [InitCapsPipe],
   // #docregion example
   selector: 'toh-heroes',
   templateUrl: 'heroes.component.html'

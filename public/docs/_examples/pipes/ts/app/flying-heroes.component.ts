@@ -53,7 +53,7 @@ export class FlyingHeroesComponent {
 // #docregion impure-component
 @Component({
   selector: 'flying-heroes-impure',
-  templateUrl: 'app/flying-heroes.component.html',
+  templateUrl: 'app/flying-heroes-impure.component.html',
 // #enddocregion impure-component
   styles: ['.flyers, .all {font-style: italic}'],
 // #docregion impure-component

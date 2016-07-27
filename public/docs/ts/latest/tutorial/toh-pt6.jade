@@ -6,6 +6,7 @@ block includes
   - var _Angular_Http = 'Angular <code>Http</code>'
   - var _Angular_http_library = 'Angular HTTP library'
   - var _HTTP_PROVIDERS = 'HTTP_PROVIDERS'
+  - var _HttpModule = 'HttpModule'
   - var _JSON_stringify = 'JSON.stringify'
 
 :marked
@@ -53,7 +54,7 @@ block http-library
 block http-providers
   :marked
     Our app will depend upon the Angular `http` service which itself depends upon other supporting services.
-    The `HTTP_PROVIDERS` array from `@angular/http` library holds providers for the complete set of http services.
+    The `HttpModule` from `@angular/http` library holds providers for the complete set of http services.
 
 :marked
   We should be able to access `!{_Http}` services from anywhere in the application.
@@ -63,8 +64,7 @@ block http-providers
 +makeExcerpt('app/main.ts','v1')
 
 :marked
-  Notice that we supply `!{_HTTP_PROVIDERS}` in !{_an} !{_array} as the second parameter to the `bootstrap` method.
-  This has the same effect as the `providers` !{_array} in `@Component` !{_decorator}.
+  Notice that we supply `!{_HttpModule}` as part of the *imports* !{_array} in the second parameter to the `bootstrap` method.
 
 .l-main-section
 :marked
@@ -133,7 +133,7 @@ block get-heroes-details
     *Observables* are a powerful way to manage asynchronous data flows.
     We'll learn about [Observables](#observables) later in this chapter.
 
-    For *now* we get back on familiar ground by immediately by 
+    For *now* we get back on familiar ground by immediately by
     converting that `Observable` to a `Promise` using the `toPromise` operator.
   +makeExample('toh-6/ts/app/hero.service.ts', 'to-promise')(format=".")
   :marked
@@ -366,7 +366,7 @@ block observables-section
     Each `Http` method  returns an `Observable` of HTTP `Response` objects.
 
     Our `HeroService` converts that `Observable` into a `Promise` and returns the promise to the caller.
-    In this section we learn to return the `Observable` directly and discuss when and why that might be 
+    In this section we learn to return the `Observable` directly and discuss when and why that might be
     a good thing to do.
 
     ### Background
@@ -379,14 +379,14 @@ block observables-section
     Recall that our `HeroService` quickly chained the `toPromise` operator to the `Observable` result of `http.get`.
     That operator converted the `Observable` into a `Promise` and we passed that promise back to the caller.
 
-    Converting to a promise is often a good choice. We typically ask `http` to fetch a single chunk of data. 
+    Converting to a promise is often a good choice. We typically ask `http` to fetch a single chunk of data.
     When we receive the data, we're done.
-    A single result in the form of a promise is easy for the calling component to consume 
+    A single result in the form of a promise is easy for the calling component to consume
     and it helps that promises are widely understood by JavaScript programmers.
 
-    But requests aren't always "one and done". We may start one request, 
+    But requests aren't always "one and done". We may start one request,
     then cancel it, and make a different request ... before the server has responded to the first request.
-    Such a _request-cancel-new-request_ sequence is difficult to implement with *promises*. 
+    Such a _request-cancel-new-request_ sequence is difficult to implement with *promises*.
     It's easy with *observables* as we'll see.
 
     ### Search-by-name
@@ -399,11 +399,11 @@ block observables-section
 
   :marked
     The `http.get` call in `HeroSearchService` is similar to the `http.get` call in the `HeroService`.
-    The notable difference: we no longer call `toPromise`. 
+    The notable difference: we no longer call `toPromise`.
     We simply return the *observable* instead.
 
     ### HeroSearchComponent
-    Let's create a new `HeroSearchComponent` that calls this new `HeroSearchService`. 
+    Let's create a new `HeroSearchComponent` that calls this new `HeroSearchService`.
 
     The component template is simple - just a textbox and a list of matching search results.
   +makeExample('toh-6/ts/app/hero-search.component.html', null,'hero-search.component.html')
@@ -419,7 +419,7 @@ block observables-section
     Time to create the `HeroSearchComponent` class and metadata.
   +makeExample('toh-6/ts/app/hero-search.component.ts', null,'hero-search.component.ts')
   :marked
-    Focus on the `searchTerms`.
+    Focus on the `searchTerms` which is an RxJS `Subject`.
   +makeExample('toh-6/ts/app/hero-search.component.ts', 'searchTerms')(format=".")
   :marked
     A `Subject` is a producer of an _observable_ event stream. 
@@ -427,7 +427,7 @@ block observables-section
 
     Each call to `search` puts a new string into this subject's _observable_ stream by calling `next`.
 
-    A `Subject` is also an `Observable`. 
+    A `Subject` is also an `Observable`.
     We're going to access that `Observable` and turn the stream
     of strings into a stream of `Hero[]` arrays, the `heroes` property.
 
@@ -454,21 +454,21 @@ block observables-section
       (formerly known as "flatMapLatest") is very clever.
 
       Every qualifying key event can trigger an http call.
-      Even with a 300ms pause between requests, we could have multiple http requests in flight 
+      Even with a 300ms pause between requests, we could have multiple http requests in flight
       and they may not return in the order sent.
 
       `switchMap` preserves the original request order while returning
-       only the observable from the most recent http call. 
+       only the observable from the most recent http call.
       Results from prior calls are canceled and discarded.
 
-      We also short-circuit the http call and return an observable containing an empty array 
+      We also short-circuit the http call and return an observable containing an empty array
       if the search text is empty.
 
       Note that _canceling_ the `HeroSearchService` observable won't actually abort a pending http request
       until the service supports that feature, a topic for another day.
       We are content for now to discard unwanted results.
   :marked
-    * `catch` intercepts a failed observable. 
+    * `catch` intercepts a failed observable.
     Our simple example prints the error to the console; a real life application should do better.
     Then we return an observable containing an empty array to clear the search result.
 
@@ -483,7 +483,7 @@ block observables-section
     :marked
       Many authorities say we should do just that.
   :marked
-    We take a different approach in this example. 
+    We take a different approach in this example.
     We combine all of the RxJS `Observable` extensions that _our entire app_ requires into a single RxJS imports file.
 
   +makeExample('toh-6/ts/app/rxjs-extensions.ts', null, 'app/rxjs-extensions.ts')(format=".")
@@ -565,7 +565,7 @@ block filetree
   - We updated our components to allow adding, editing and deleting of heroes.
   - We configured an in-memory web API.
   <li if-docs="ts"> We learned how to use Observables.</li>
-  
+
   Below is a summary of the files we changed and added.
 
 block file-summary
@@ -599,4 +599,4 @@ block file-summary
     hero-search.component.ts,
     hero-search.service.html,
     rxjs-operators.ts`
-) 
+)

@@ -4,6 +4,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router }       from '@angular/router';
 
 import { Crisis, CrisisService } from './crisis.service';
+import { Subscription }          from 'rxjs/Subscription';
 
 @Component({
   template: `
@@ -19,7 +20,7 @@ import { Crisis, CrisisService } from './crisis.service';
 export class CrisisListComponent implements OnInit, OnDestroy {
   crises: Crisis[];
   private selectedId: number;
-  private sub: any;
+  private sub: Subscription;
 
   constructor(
     private service: CrisisService,

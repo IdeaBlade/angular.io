@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Hero }        from './hero';
 import { HeroService } from './hero.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'my-hero-detail',
@@ -18,7 +19,7 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
   @Input() hero: Hero;
   @Output() close = new EventEmitter();
   error: any;
-  sub: any;
+  sub: Subscription;
   navigated = false; // true if navigated here
   // #enddocregion variables-imports
 

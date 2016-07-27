@@ -149,20 +149,18 @@ code-example(language="bash").
   :marked
     See the *base href* section of the [Router](../guide/router.html#!#base-href) chapter to learn why this matters.
 :marked
-  The Angular router is a combination of multiple provided services (`provideRouter`), multiple directives (`ROUTER_DIRECTIVES`),
+  The Angular router is a combination of multiple provided services (`RouterModule`), multiple directives (`ROUTER_DIRECTIVES`),
   and a configuration (`RouterConfig`). We'll configure our routes first:
 
   ### Configure and add the router
 
-  Our application doesn't have a router yet. We'll create a configuration file for our routes that
-  does two things
-  (a) configure that router with *routes*. (b) provide an export to add the router to our bootstrap
-
+  Our application doesn't have a router yet.
+  Start by creating a configuration file for the application routes.
   *Routes* tell the router which views to display when a user clicks a link or
   pastes a URL into the browser address bar.
 
-  Let's define our first route, a route to the `HeroesComponent`.
-+makeExample('toh-5/ts/app/app.routes.2.ts', '', 'app/app.routes.ts')(format=".")
+  Our first route goes to the `HeroesComponent`.
++makeExample('toh-5/ts/app/app.routes.1.ts', '', 'app/app.routes.ts')(format=".")
 :marked
   The `RouterConfig` is an array of *route definitions*.
   We have only one route definition at the moment but rest assured, we'll add more.
@@ -178,16 +176,22 @@ code-example(language="bash").
 
 :marked
   ### Make the router available.
-  The *Component Router* is a service. We have to import our `appRouterProviders` which
-  contains our configured router and make it available to the application by adding it to
-  the `bootstrap` array.
-+makeExample('toh-5/ts/app/main.ts', '', 'app/main.ts')(format=".")
+  The *Component Router* is an external, optional Angular module called `RouterModule`.
+  Import it from Angular's Router library and import the `routes` from our `app.routes.ts` file.
 
+  Then create a configured router service by passing
+  the `routes` to the `forRoot` static class method of the `RouterModule`.
+
+  Do this inline within the application bootstrap's `imports` array as follows:
++makeExample('toh-5/ts/app/main.ts', '', 'app/main.ts')(format=".")
+.l-sub-section
+  :marked
+    We call the `forRoot` method because we're providing a configured router at the _root_ of the application.
 :marked
   ### Router Outlet
 
   If we paste the path, `/heroes`, into the browser address bar,
-  the router should match it to the `'Heroes'` route and display the `HeroesComponent`.
+  the router should match it to the `heroes` route and display the `HeroesComponent`.
   But where?
 
   We have to ***tell it where*** by adding `<router-outlet>` marker tags to the bottom of the template.
@@ -246,7 +250,7 @@ code-example(language="bash").
   Import the `DashboardComponent` so we can reference it in the dashboard route definition.
 
   Add the following `'Dashboard'` route definition to the `RouterConfig` array of definitions.
-+makeExample('toh-5/ts/app/app.routes.1.ts','dashboard-route', 'app/app.routes.ts (Dashboard route)')(format=".")
++makeExample('toh-5/ts/app/app.routes.2.ts','dashboard-route', 'app/app.routes.ts (Dashboard route)')(format=".")
 .l-sub-section
   :marked
     **Redirect**
@@ -256,7 +260,7 @@ code-example(language="bash").
     Remember that the browser launches with `/` in the address bar.
     We can use a redirect route to make this happen.
 
-+makeExample('toh-5/ts/app/app.routes.1.ts','redirect-route', 'app/app.routes.ts (Redirect route)')(format=".")
++makeExample('toh-5/ts/app/app.routes.2.ts','redirect-route', 'app/app.routes.ts (Redirect route)')(format=".")
 
 .l-sub-section
   :marked
@@ -265,7 +269,7 @@ code-example(language="bash").
 :marked
   Finally, add a dashboard navigation link to the template, just above the *Heroes* link.
 
-+makeExample('toh-5/ts/app/app.component.ts','template', 'app/app.component.ts (template)')(format=".")
++makeExample('toh-5/ts/app/app.component.3.ts','template', 'app/app.component.ts (template)')(format=".")
 .l-sub-section
   :marked
     We nestled the two links within `<nav>` tags.
@@ -364,14 +368,14 @@ code-example(format='').
   ### Configure a Route with a Parameter
 
   Here's the *route definition* we'll use.
-+makeExample('toh-5/ts/app/app.routes.1.ts','hero-detail-route', 'app/app.routes.ts (route to HeroDetailComponent)')(format=".")
++makeExample('toh-5/ts/app/app.routes.2.ts','hero-detail-route', 'app/app.routes.ts (route to HeroDetailComponent)')(format=".")
 :marked
   The colon (:) in the path indicates that `:id` is a placeholder to be filled with a specific hero `id`
   when navigating to the `HeroDetailComponent`.
 .l-sub-section
   :marked
     Of course we have to import the `HeroDetailComponent` before we create this route:
-  +makeExample('toh-5/ts/app/app.routes.1.ts','hero-detail-import')(format=".")
+  +makeExample('toh-5/ts/app/app.routes.2.ts','hero-detail-import')(format=".")
 :marked
   We're finished with the application routes.
 
@@ -490,7 +494,7 @@ code-example(format='').
   with an `id` field set to the value of the selected hero's `id`.
 
   The two array items align with the ***path*** and ***:id*** token in the parameterized `HeroDetail` route configuration we added to `app.routes.ts` earlier in the chapter.
-+makeExample('toh-5/ts/app/app.routes.1.ts','hero-detail-route', 'app/app.routes.ts (hero detail route)')(format=".")
++makeExample('toh-5/ts/app/app.routes.2.ts','hero-detail-route', 'app/app.routes.ts (hero detail route)')(format=".")
 :marked
   The `DashboardComponent` doesn't have the router yet. We obtain it in the usual way:
   import the `router` reference and inject it in the constructor (along with the `HeroService`):
@@ -626,7 +630,7 @@ figure.image-display
     The Angular Router provides a `routerLinkActive` directive we can use to
     add a class to the HTML navigation element whose route matches the active route.
     All we have to do is define the style for it. Sweet!
-+makeExample('toh-5/ts/app/app.component.3.ts', 'router-link-active', 'app/app.component.ts (active router links)')(format=".")
++makeExample('toh-5/ts/app/app.component.ts', 'router-link-active', 'app/app.component.ts (active router links)')(format=".")
 :marked
   Set the `AppComponent`’s `styleUrls` property to this CSS file.
 +makeExample('toh-5/ts/app/app.component.ts','style-urls', 'app/app.component.ts (styleUrls)')(format=".")

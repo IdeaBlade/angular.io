@@ -7,7 +7,7 @@ include ../_util-fns
 
   Run the <live-example></live-example> for this part.
 
-  Create a folder called `angular2-tour-of-heroes` and follow the [QuickStart](../quickstart.html) steps 
+  Create a folder called `angular2-tour-of-heroes` and follow the [QuickStart](../quickstart.html) steps
   which provide the prerequisites, the folder structure, and the core files for our Tour of Heroes.
 
 include ../_quickstart_repo
@@ -22,7 +22,7 @@ include ../_quickstart_repo
       .file app.component.ts
       .file main.ts
     .file node_modules ...
-    .file typings ...      
+    .file typings ...
     .file index.html
     .file package.json
     .file styles.css
@@ -141,14 +141,22 @@ code-example(language="bash").
   and see those changes wherever we bind to the hero’s name.
   In short, we want two-way data binding.
 
-  Let’s update the template to use the  **`ngModel`** built-in directive for two-way binding.
+  Before we can use two-way data binding for **form inputs**, we need to import the `FormsModule`
+  package and add it as the second argument in our bootstrap function. The second argument takes
+  an object where we define our `imports` as an array. We add the `FormsModule` package to our imports
+  and now we have included the forms package which includes `ngModel`.
+
++makeExample('toh-1/ts/app/main.ts', '', 'app.component.ts (FormsModule import)')
 
 .l-sub-section
   :marked
-    Learn more about `ngModel` in the 
+    Learn more about the `FormsModule` and `ngModel` in the
     [Forms](../guide/forms.html#ngModel) and
     [Template Syntax](../guide/template-syntax.html#ngModel) chapters.
+
 :marked
+  Let’s update the template to use the  **`ngModel`** built-in directive for two-way binding.
+
   Replace the `<input>` with the following HTML
 
 code-example(language="html").

@@ -1,7 +1,7 @@
 // #docplaster
 // #docregion
 // #docregion route-config
-import { provideRouter, RouterConfig } from '@angular/router';
+import { RouterConfig } from '@angular/router';
 
 // #enddocregion route-config
 // #enddocregion
@@ -15,7 +15,7 @@ import { PageNotFoundComponent } from './not-found.component';
 
 // #docregion
 // #docregion route-config
-const routes: RouterConfig = [
+export const routes: RouterConfig = [
   // #docregion route-defs
   { path: 'crisis-center', component: CrisisCenterComponent },
   { path: 'heroes', component: HeroListComponent },
@@ -26,8 +26,8 @@ const routes: RouterConfig = [
   { path: '**', component: PageNotFoundComponent }
 ];
 
-export const appRouterProviders = [
-  provideRouter(routes)
+export const appRouterProviders: any[] = [
+
 ];
 // #enddocregion route-config
 // #enddocregion

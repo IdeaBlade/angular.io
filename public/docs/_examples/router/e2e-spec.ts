@@ -11,18 +11,18 @@ describe('Router', function () {
 
     return {
       hrefs: hrefEles,
-      routerParent: element(by.css('my-app > undefined')),
-      routerTitle: element(by.css('my-app > undefined > h2')),
+      routerParent: element(by.css('my-app > ng-component')),
+      routerTitle: element(by.css('my-app > ng-component > h2')),
 
       crisisHref: hrefEles.get(0),
-      crisisList: element.all(by.css('my-app > undefined > undefined li')),
-      crisisDetail: element(by.css('my-app > undefined > undefined > div')),
-      crisisDetailTitle: element(by.css('my-app > undefined > undefined > div > h3')),
+      crisisList: element.all(by.css('my-app > ng-component > ng-component li')),
+      crisisDetail: element(by.css('my-app > ng-component > ng-component > div')),
+      crisisDetailTitle: element(by.css('my-app > ng-component > ng-component > div > h3')),
 
       heroesHref: hrefEles.get(1),
-      heroesList: element.all(by.css('my-app > undefined li')),
-      heroDetail: element(by.css('my-app > undefined > div')),
-      heroDetailTitle: element(by.css('my-app > undefined > div > h3')),
+      heroesList: element.all(by.css('my-app > ng-component li')),
+      heroDetail: element(by.css('my-app > ng-component > div')),
+      heroDetailTitle: element(by.css('my-app > ng-component > div > h3')),
 
       adminHref: hrefEles.get(2),
       loginHref: hrefEles.get(3)
@@ -31,7 +31,7 @@ describe('Router', function () {
 
   it('should be able to see the start screen', function () {
     let page = getPageStruct();
-    expect(page.hrefs.count()).toEqual(4, 'should be two dashboard choices');
+    expect(page.hrefs.count()).toEqual(4, 'should be 4 dashboard choices');
     expect(page.crisisHref.getText()).toEqual('Crisis Center');
     expect(page.heroesHref.getText()).toEqual('Heroes');
     expect(page.adminHref.getText()).toEqual('Crisis Admin');

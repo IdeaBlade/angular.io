@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-variable */
 // #docregion
 // #docregion example
 /* avoid */

@@ -7,6 +7,7 @@ import 'rxjs/add/observable/fromPromise';
 
 import { Crisis, CrisisService }  from './crisis.service';
 import { DialogService }          from '../dialog.service';
+import { Subscription }           from 'rxjs/Subscription';
 
 @Component({
   template: `
@@ -30,7 +31,7 @@ import { DialogService }          from '../dialog.service';
 export class CrisisDetailComponent implements OnInit, OnDestroy {
   crisis: Crisis;
   editName: string;
-  private sub: any;
+  private sub: Subscription;
 
   constructor(
     private service: CrisisService,

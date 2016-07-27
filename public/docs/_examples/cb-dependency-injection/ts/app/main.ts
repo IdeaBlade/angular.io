@@ -1,5 +1,6 @@
 // #docregion
 import { bootstrap }            from '@angular/platform-browser-dynamic';
+import { FormsModule }          from '@angular/forms';
 import { XHRBackend }           from '@angular/http';
 import { appRouterProviders }   from './app.routes';
 import { LocationStrategy,
@@ -12,11 +13,14 @@ import { InMemoryBackendService,
 import { AppComponent }     from './app.component';
 
 // #docregion bootstrap
-bootstrap(AppComponent, [
-  appRouterProviders,
-  { provide: LocationStrategy, useClass: HashLocationStrategy },
+bootstrap(AppComponent, {
+  imports: [FormsModule],
+  providers: [
+    appRouterProviders,
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
 
-  { provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
-  { provide: SEED_DATA,  useClass: HeroData } // in-mem server data
-]).catch((err: any) => console.error(err));
+    { provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
+    { provide: SEED_DATA,  useClass: HeroData } // in-mem server data
+  ]
+});
 // #enddocregion bootstrap

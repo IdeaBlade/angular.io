@@ -11,6 +11,7 @@ import { Hero } from './hero';
 // #docregion import-hero-service
 import { HeroService } from './hero.service';
 // #enddocregion import-hero-service
+import { Subscription } from 'rxjs/Subscription';
 
 // #docregion extract-template
 @Component({
@@ -26,7 +27,7 @@ import { HeroService } from './hero.service';
 export class HeroDetailComponent implements OnInit, OnDestroy {
   // #enddocregion implement
   hero: Hero;
-  sub: any;
+  sub: Subscription;
 
   // #docregion ctor
   constructor(

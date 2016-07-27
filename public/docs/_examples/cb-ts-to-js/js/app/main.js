@@ -31,7 +31,7 @@
     bootstrap(app.HeroDIInjectAdditionalComponent);
     bootstrap(app.HeroIOComponent);
     bootstrap(app.HeroesHostBindingsComponent);
-    bootstrap(app.HeroesQueriesComponent);
+    bootstrap(app.HeroesQueriesComponent, {declarations: [app.HeroQueriesComponent]});
   });
 
   // #docregion appimport

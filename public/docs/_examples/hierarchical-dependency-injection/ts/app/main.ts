@@ -1,10 +1,14 @@
 // #docregion
 import { bootstrap }           from '@angular/platform-browser-dynamic';
+import { FormsModule }         from '@angular/forms';
 
 import { HeroesListComponent } from './heroes-list.component';
 import { HeroesService }       from './heroes.service';
 
-bootstrap(HeroesListComponent, [HeroesService]);
+bootstrap(HeroesListComponent, {
+  imports: [FormsModule],
+  providers: [HeroesService]
+});
 
 /* Documentation artifact below
 // #docregion bad-alternative

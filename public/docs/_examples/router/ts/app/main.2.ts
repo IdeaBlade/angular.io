@@ -5,29 +5,27 @@
 // #docregion
 // main entry point
 import { bootstrap }            from '@angular/platform-browser-dynamic';
-
-// Add these symbols to override the `LocationStrategy`
-import { LocationStrategy,
-         HashLocationStrategy } from '@angular/common';
+import { FormsModule }          from '@angular/forms';
+import { RouterModule }         from '@angular/router';
 
 import { AppComponent }         from './app.component';
-import { appRouterProviders }   from './app.routes';
+import { routes }               from './app.routes';
 
 // #enddocregion
 
 /* Can't use AppComponent ... but display as if we can
 // #docregion
-bootstrap(AppComponent, [
+bootstrap(AppComponent, {
 // #enddocregion
 */
 // Actually use the v.2 component
-import { AppComponent as ac } from './app.component.ts'; // './app.component.2';
+import { AppComponent as ac } from './app.component.2'; // './app.component.2';
 
-bootstrap(ac, [
+bootstrap(ac, {
 // #docregion
-  appRouterProviders,
-  { provide: LocationStrategy, useClass: HashLocationStrategy } // .../#/crisis-center/
-
-])
-.catch(err => console.error(err));
+  imports:   [
+    FormsModule,
+    RouterModule.forRoot(routes, { useHash: true }) // .../#/crisis-center/
+  ]
+});
 // #enddocregion
