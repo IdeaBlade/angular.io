@@ -2,11 +2,10 @@
 // #docregion
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute }       from '@angular/router';
-import { Observable }                   from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
 
 import { Crisis, CrisisService }  from './crisis.service';
 import { DialogService }          from '../dialog.service';
+import { Observable }             from 'rxjs/Observable';
 import { Subscription }           from 'rxjs/Subscription';
 
 @Component({
@@ -37,7 +36,7 @@ export class CrisisDetailComponent implements OnInit, OnDestroy {
     private service: CrisisService,
     private route: ActivatedRoute,
     private router: Router,
-    private dialogService: DialogService
+    public dialogService: DialogService
     ) { }
 
   ngOnInit() {
@@ -72,16 +71,14 @@ export class CrisisDetailComponent implements OnInit, OnDestroy {
     this.gotoCrises();
   }
 
-  canDeactivate(): Observable<boolean> | boolean {
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     // Allow synchronous navigation (`true`) if no crisis or the crisis is unchanged
     if (!this.crisis || this.crisis.name === this.editName) {
       return true;
     }
     // Otherwise ask the user with the dialog service and return its
     // promise which resolves to true or false when the user decides
-    let p = this.dialogService.confirm('Discard changes?');
-    let o = Observable.fromPromise(p);
-    return o;
+    return this.dialogService.confirm('Discard changes?');
   }
 
   // #docregion gotoCrises
@@ -92,7 +89,7 @@ export class CrisisDetailComponent implements OnInit, OnDestroy {
     // Add a totally useless `foo` parameter for kicks.
     // #docregion gotoCrises-navigate
     // Absolute link
-    this.router.navigate(['/crisis-center', {id: crisisId, foo: 'foo'}]);
+    this.router.navigate(['/crisis-center', { id: crisisId, foo: 'foo' }]);
     // #enddocregion gotoCrises-navigate
   }
   // #enddocregion gotoCrises

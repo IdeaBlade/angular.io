@@ -1,11 +1,12 @@
 // #docregion
-import { RouterConfig }          from '@angular/router';
+import { Routes }                from '@angular/router';
+
 import { CrisisDetailComponent } from './crisis-detail.component';
 import { CrisisListComponent }   from './crisis-list.component';
 import { CrisisCenterComponent } from './crisis-center.component';
 
 // #docregion routes
-export const crisisCenterRoutes: RouterConfig = [
+export const crisisCenterRoutes: Routes = [
   // #docregion redirect
   {
     path: '',
