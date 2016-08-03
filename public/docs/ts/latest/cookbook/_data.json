@@ -35,7 +35,7 @@
 
   "dynamic-form": {
     "title": "Dynamic Forms",
-    "intro": "Render dynamic forms with NgFormModel"
+    "intro": "Render dynamic forms with FormGroup"
   },
 
   "set-document-title": {
