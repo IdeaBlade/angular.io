@@ -1,4 +1,4 @@
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
@@ -32,8 +32,4 @@ import { Logger }         from './logger.service';
   ],
   bootstrap: [ AppComponent ]
 })
-export class AppModule {
-  constructor(appRef: ApplicationRef) {
-    appRef.bootstrap(AppComponent);
-  }
-}
+export class AppModule { }
