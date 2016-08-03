@@ -17,10 +17,7 @@ import { ApplicationRef } from '@angular/core';
 @NgModule({
   imports: [ BrowserModule ],
   declarations: [ AppComponent ],
-  entryComponents: [ AppComponent ]
+  entryComponents: [ AppComponent ],
+  bootstrap: [ AppComponent ]
 })
-export class AppModule {
-  constructor(appRef: ApplicationRef) {
-    appRef.bootstrap(AppComponent);
-  }
-}
+export class AppModule { }
