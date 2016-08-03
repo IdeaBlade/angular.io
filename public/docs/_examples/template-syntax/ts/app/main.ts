@@ -1,8 +1,5 @@
-import { bootstrap } from '@angular/platform-browser-dynamic';
-import { FormsModule } from '@angular/forms';
+import { browserDynamicPlatform } from '@angular/platform-browser-dynamic';
 
-import { AppComponent } from './app.component';
+import { AppModule } from './app.module';
 
-bootstrap(AppComponent, {
-  imports: [FormsModule]
-});
+browserDynamicPlatform().bootstrapModule(AppModule);
