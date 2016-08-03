@@ -30,7 +30,7 @@ import { Logger }         from './logger.service';
     SalesTaxService,
     TaxRateService
   ],
-  entryComponents: [ AppComponent ]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {
   constructor(appRef: ApplicationRef) {
