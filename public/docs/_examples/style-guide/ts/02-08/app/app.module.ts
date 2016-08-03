@@ -7,7 +7,7 @@ export const route =  { path: '02-08', component: AppComponent };
 
 @NgModule({
   declarations: [
-    AppComponent, 
+    AppComponent,
     ValidateDirective
   ],
   exports: [ AppComponent ]

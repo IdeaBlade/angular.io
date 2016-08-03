@@ -8,8 +8,8 @@ export const route =  { path: '02-07', component: AppComponent };
 
 @NgModule({
   declarations: [
-    AppComponent, 
-    HeroComponent, 
+    AppComponent,
+    HeroComponent,
     UsersComponent
   ],
   exports: [ AppComponent ]
