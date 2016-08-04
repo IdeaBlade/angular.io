@@ -1,3 +1,7 @@
+import { NgModule } from '@angular/core';
+import { browserDynamicPlatform }   from '@angular/platform-browser-dynamic';
+import { BrowserModule }            from '@angular/platform-browser';
+
 import { HttpModule,
          XHRBackend }   from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -43,6 +47,7 @@ import * as s0901 from '../09-01/app/app.module';
 ///////////////////
 const moduleMetadata = {
   imports: [
+    BrowserModule,
     HttpModule,
 
     s0101.AppModule,
@@ -73,33 +78,7 @@ const moduleMetadata = {
     s0901.AppModule,
 
     RouterModule.forRoot([
-      { path: '', redirectTo: '/01-01', pathMatch: 'full' },
-      s0101.route,
-      s0207.route,
-      s0208.route,
-      s0301.route,
-      s0302.route,
-      s0303.route,
-      s0304.route,
-      s0305.route,
-      s0306.route,
-      s0410.route,
-      s0414.route,
-      s0502.route,
-      s0503.route,
-      s0504.route,
-      s0512.route,
-      s0513.route,
-      s0514.route,
-      s0515.route,
-      s0516.route,
-      s0517.route,
-      s0601.route,
-      s0603.route,
-      s0701.route,
-      s0703.route,
-      s0704.route,
-      s0901.route,
+      { path: '', redirectTo: '/01-01', pathMatch: 'full' }
     ], {/* enableTracing: true */}),
   ],
   declarations: [AppComponent],
@@ -107,28 +86,13 @@ const moduleMetadata = {
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: XHRBackend, useClass: InMemoryBackendService },
     { provide: SEED_DATA,  useClass: HeroData }
-  ]
+  ],
+  bootstrap: [ AppComponent ]
 };
 
-////// Bootstrap Jr.
-import { bootstrap } from '@angular/platform-browser-dynamic';
-bootstrap(AppComponent, moduleMetadata);
+@NgModule(moduleMetadata)
+class MainModule { }
 
-///////  LONG FORM
-
-// import { ApplicationRef, NgModule } from '@angular/core';
-// import { browserDynamicPlatform }   from '@angular/platform-browser-dynamic';
-// import { BrowserModule }            from '@angular/platform-browser';
-
-// moduleMetadata.imports.unshift(BrowserModule);
-// moduleMetadata['entryComponents'] = [AppComponent];
-
-// @NgModule(moduleMetadata)
-// class MainModule {
-//   constructor(appRef: ApplicationRef) {
-//     appRef.bootstrap(AppComponent);
-//   }
-// }
-// browserDynamicPlatform().bootstrapModule(MainModule);
+browserDynamicPlatform().bootstrapModule(MainModule);
 
 
