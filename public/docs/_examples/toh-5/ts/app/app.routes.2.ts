@@ -1,12 +1,13 @@
 // #docregion
-import { RouterConfig }       from '@angular/router';
+import { Routes }             from '@angular/router';
+
 import { DashboardComponent } from './dashboard.component';
 import { HeroesComponent }    from './heroes.component';
 // #docregion hero-detail-import
 import { HeroDetailComponent } from './hero-detail.component';
 // #enddocregion hero-detail-import
 
-export const routes: RouterConfig = [
+export const appRoutes: Routes = [
   // #docregion redirect-route
   {
     path: '',

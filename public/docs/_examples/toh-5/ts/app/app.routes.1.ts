@@ -1,8 +1,9 @@
 // #docregion
-import { RouterConfig }    from '@angular/router';
+import { Routes } from '@angular/router';
+
 import { HeroesComponent } from './heroes.component';
 
-export const routes: RouterConfig = [
+export const appRoutes: Routes = [
   {
     path: 'heroes',
     component: HeroesComponent

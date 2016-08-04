@@ -4,14 +4,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 // #enddocregion import-oninit
 // #docregion import-activated-route
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 // #enddocregion import-activated-route
 
 import { Hero } from './hero';
 // #docregion import-hero-service
 import { HeroService } from './hero.service';
 // #enddocregion import-hero-service
-import { Subscription } from 'rxjs/Subscription';
 
 // #docregion extract-template
 @Component({
@@ -24,10 +23,9 @@ import { Subscription } from 'rxjs/Subscription';
 })
 // #enddocregion extract-template
 // #docregion implement
-export class HeroDetailComponent implements OnInit, OnDestroy {
+export class HeroDetailComponent implements OnInit {
   // #enddocregion implement
   hero: Hero;
-  sub: Subscription;
 
   // #docregion ctor
   constructor(
@@ -39,7 +37,7 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
   // #docregion ng-oninit
   ngOnInit() {
     // #docregion get-id
-    this.sub = this.route.params.subscribe(params => {
+    this.route.params.forEach((params: Params) => {
       let id = +params['id'];
       this.heroService.getHero(id)
         .then(hero => this.hero = hero);
@@ -47,12 +45,6 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
     // #enddocregion get-id
   }
   // #enddocregion ng-oninit
-
-  // #docregion ng-ondestroy
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
-  // #enddocregion ng-ondestroy
 
   // #docregion go-back
   goBack() {
