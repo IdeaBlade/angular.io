@@ -7,14 +7,14 @@ import { AppComponent }  from './app.component';
 import { HeroFormComponent } from './hero-form.component';
 
 @NgModule({
-  imports: [ 
+  imports: [
     BrowserModule,
     FormsModule
   ],
-  declarations: [ 
+  declarations: [
     AppComponent,
     HeroFormComponent
   ],
-  bootstrap: [ AppComponent ] 
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
