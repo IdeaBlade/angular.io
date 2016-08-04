@@ -151,7 +151,7 @@ code-example(format=".").
 .l-main-section
 :marked
   ## Refresh the AppModule
-  We return to the `AppModule` and teach it to use the `HeroDetailComponent`.
+  We return to the `AppModule`, the application's root module, and teach it to use the `HeroDetailComponent`.
 
   We begin by importing the `HeroDetailComponent` so we can refer to it.
 
@@ -240,7 +240,8 @@ code-example(format=".")
 
   * We created a reusable component
   * We learned how to make a component accept input
-  * We learned to declare the application directives we need in the `NgModule` decorator's `declarations` array.
+  * We learned to declare the application directives we need in the application's root module. We
+  list the directives in the `NgModule` decorator's `declarations` array.
   * We learned to bind a parent component to a child component.
 
   Run the <live-example></live-example> for this part.
