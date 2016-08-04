@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 import { HeroesListComponent } from './heroes-list.component';
+import { HeroEditorComponent } from './hero-editor.component';
+import { HeroCardComponent } from './hero-card.component';
 import { HeroesService } from './heroes.service';
 
 @NgModule({
@@ -12,7 +14,11 @@ import { HeroesService } from './heroes.service';
     FormsModule
   ],
   providers: [ HeroesService ],
-  declarations: [ HeroesListComponent ],
+  declarations: [
+    HeroesListComponent,
+    HeroCardComponent,
+    HeroEditorComponent
+  ],
   bootstrap: [ HeroesListComponent ]
 })
 export class AppModule { }
@@ -27,7 +33,11 @@ export class AppModule { }
   ],
   providers: [ HeroesService, RestoreService],
   declarations: [ HeroesListComponent ],
-  bootstrap: [ HeroesListComponent ]
+  bootstrap: [
+    HeroesListComponent,
+    HeroCardComponent,
+    HeroEditorComponent
+  ]
 })
 // #enddocregion bad-alternative
 */
