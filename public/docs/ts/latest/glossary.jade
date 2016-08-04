@@ -577,6 +577,23 @@ include _util-fns
 .l-main-section
 <a id="Q"></a>
 <a id="R"></a>
+<a id="reactive-forms"></a>
+:marked
+  ## Reactive Forms
+.l-sub-section
+  :marked
+    A technique for building Angular forms through code in a component.
+    The alternate technique is [Template-Driven Forms](#template-driven-forms).
+
+    When building reactive forms:
+    - The "source of truth" is the component. The validation is defined using code in the component.
+    - Each control is explicitly created in the component class with `new FormControl()` or with `FormBuilder`.
+    - The template input elements do *not* use `ngModel`.
+    - The associated Angular directives are all prefixed with `Form` such as `FormGroup`, `FormControl`, and `FormControlName`.
+
+    Reactive forms are powerful, flexible, and great for more complex data entry form scenarios, such as dynamic generation
+    of form controls.
+
 :marked
   ## Router
 .l-sub-section
@@ -678,6 +695,26 @@ include _util-fns
     most notably a [Component](#component).
 
     We write templates in a special [Template Syntax](/docs/ts/latest/guide/template-syntax.html).
+
+<a id="template-driven-forms"></a>
+:marked
+  ## Template-Driven Forms
+.l-sub-section
+  :marked
+    A technique for building Angular forms using HTML forms and input elements in the view.
+    The alternate technique is [Reactive Forms](#reactive-forms).
+
+    When building template-driven forms:
+    - The "source of truth" is the template. The validation is defined using attributes on the individual input elements.
+    - [Two-way binding](#data-binding) with `ngModel` keeps the component model in synchronization with the user's entry into the input elements.
+    - Behind the scenes, Angular creates a new control for each input element that has a `name` attribute and
+    two-way binding set up.
+    - The associated Angular directives are all prefixed with `ng` such as `ngForm`, `ngModel`, and `ngModelGroup`.
+
+    Template-driven forms are convenient, quick, and simple and are a good choice for many basic data entry form scenarios.
+
+    Learn how to build template-driven forms
+    in the [Forms](/docs/ts/latest/guide/forms.html) chapter.
 
 :marked
   ## Template Expression
