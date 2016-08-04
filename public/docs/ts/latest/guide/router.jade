@@ -53,6 +53,7 @@ include ../_util-fns
   * confirming or canceling navigation with [guards](#guards)
     * [CanActivate](#can-activate-guard) to prevent navigation to a route
     * [CanDeactivate](#can-deactivate-guard) to prevent navigation away from the current route
+    * [Resolve](#resolve-guard) to pre-fetch data before activating a route
   * providing optional information across routes with [query parameters](#query-parameters)
   * jumping to anchor elements using a [fragment](#fragment)
   * choosing the "HTML5" or "hash" [URL style](#browser-url-styles)
@@ -322,6 +323,7 @@ figure.image-display
   * child routes (the *Crisis Center* has its own routes)
   * the `CanActivate` guard (checking route access)
   * the `CanDeactivate` guard (ask permission to discard unsaved changes)
+  * the `Resolve` guard (pre-fetching route data)
 
 <a id="getting-started"></a>
 .l-main-section
@@ -1351,6 +1353,70 @@ h3#can-deactivate-guard <i>CanDeactivate</i>: handling unsaved changes
 :marked
   Now we have given our user a safeguard against unsaved changes.
 
+<a id="Resolve"></a>
+h3#resolve-guard <i>Resolve</i>: pre-fetching component data
+:marked
+  In our `Hero Detail` and `Crisis Detail`, we waited until the route was activated to fetch our respective hero or crisis.
+
+  This worked well for us, but we can always do better.
+  If we were using a real world api, there may be some delay in when the data we want to display gets returned.
+  We don't want to display a blank component until the data loads in this situation.
+
+  We'd like to pre-fetch data from the server so its ready the moment our route is activated.
+  We'd also like to handle the situation where our data fails to load or some other error condition occurs.
+  This would help us in our `Crisis Center` if we navigated to an `id` that doesn't return a record.
+  We could send the user back to the `Crisis List` where we only show valid crisis centers.
+  We want to delay rendering of our route component until all necessary data has been fetched or some action
+  has occurred.
+
+  We need the `Resolve` guard.
+
+  ### Preload route information
+
+  We'll update our `Crisis Detail` route to resolve our Crisis before loading the route, or if the user happens to
+  navigate to an invalid crisis center `:id`, we'll navigate back to our list of existing crises.
+
+  Like the `CanActivate` and `CanDeactivate` guards, the **`Resolve`** guard is an interface we can implement as a service
+  to resolve route data synchronously or asynchronously. In our `Crisis Detail` component, we used the `ngOnInit` to retrieve the `Crisis`
+  information. We also navigated the user away from the route if the `Crisis` was not found. It would be more efficient to perform this
+  action before the route is ever activated.
+
+  We'll create a `CrisisDetailResolve` service that will handle retrieving the `Crisis` and navigating the user away if the `Crisis` does
+  not exist. Then we can be assured that when we activate the `CrisisDetailComponent`, the associated Crisis will already be available
+  for display.
+
+  Let's create our `crisis-detail-resolve.service.ts` file within our `Crisis Center` feature area.
+
++makeExample('router/ts/app/crisis-center/crisis-detail-resolve.service.ts', '', 'crisis-detail-resolve.service.ts')
+
+:marked
+  We'll take the relevant parts of the `ngOnInit` lifecycle hook in our `CrisisDetailComponent` and moved them into our `CrisisDetailResolve` guard.
+  We import the `Crisis` model and `CrisisService` and also the `Router` for navigation from our resolve implementation. We want to be explicit about
+  the data we are resolving, so we implement the `Resolve` interface with a type of `Crisis`. This lets us know that what we will resolve will match our
+  `Crisis` model. We inject the `CrisisService` and `Router` and implement the `resolve` method that supports a `Promise`, `Observable` or a synchronous
+  return value.
+
+  We'll use our `CrisisService.getCrisis` method that returns a promise to prevent our route from loading until the data is fetched. If we don't find a valid `Crisis`,
+  we navigate the user back to the `CrisisList`, canceling the previous in-flight navigation to the crisis details.
+
+  Now that our guard is ready, we'll import it in our `crisis-center.routes.ts` and use the `resolve` object in our route configuration.
+
++makeExample('router/ts/app/crisis-center/crisis-center.routes.ts', 'crisis-detail-resolve', 'crisis-center.routes.ts (resolve)')
+
+:marked
+  We'll add the `CrisisDetailResolve` service to our crisis center module's `providers`, so its available to the `Router` during the navigation process.
+
++makeExample('router/ts/app/crisis-center/crisis-center.module.ts', 'crisis-detail-resolve', 'crisis-center.module.ts (crisis detail resolve provider)')
+
+:marked
+  Now that we've added our `Resolve` guard to fetch data before the route loads, we no longer need to do this once we get into our `CrisisDetailComponent`.
+  We'll update the `CrisisDetailComponent` to use the `ActivatedRoute.data`, which is where our `crisis` property from our `Resolve` guard will be provided.
+  Once activated, all we need to do is set our local `crisis` and `editName` properties from our resolved `Crisis` information. We no longer need to subscribe
+  and unsubscribe to the `ActivatedRoute` params to fetch the `Crisis` because it is being provided synchronously at the time the route component is activated.
+
++makeExample('router/ts/app/crisis-center/crisis-detail.component.ts', 'crisis-detail-resolve', 'crisis-detail.component.ts (ngOnInit v.2)')
+
+:marked
   **Two critical points**
   1. The router interface is optional. We don't inherit from a base class. We simply implement the interface method or not.
 
@@ -1362,23 +1428,30 @@ h3#can-deactivate-guard <i>CanDeactivate</i>: handling unsaved changes
 
 +makeTabs(
    `router/ts/app/app.component.ts,
-   router/ts/app/auth-guard.service.2.ts,
-   router/ts/app/can-deactivate-guard.service.ts,
    router/ts/app/crisis-center/crisis-center.component.ts,
    router/ts/app/crisis-center/crisis-center.routes.ts,
    router/ts/app/crisis-center/crisis-list.component.1.ts,
-   router/ts/app/crisis-center/crisis-detail.component.1.ts,
+   router/ts/app/crisis-center/crisis-detail.component.ts,
+   router/ts/app/crisis-center/crisis-detail-resolve.service.ts,
    router/ts/app/crisis-center/crisis.service.ts
   `,
   null,
    `app.component.ts,
-   auth-guard.service.ts,
-   can-deactivate-guard.service.ts,
    crisis-center.component.ts,
    crisis-center.routes.ts,
    crisis-list.component.ts,
    crisis-detail.component.ts,
+   crisis-detail-resolve.service.ts,
    crisis.service.ts
+  `)
+
++makeTabs(
+   `router/ts/app/auth-guard.service.2.ts,
+   router/ts/app/can-deactivate-guard.service.ts
+  `,
+  null,
+   `auth-guard.service.ts,
+   can-deactivate-guard.service.ts
   `)
 
 

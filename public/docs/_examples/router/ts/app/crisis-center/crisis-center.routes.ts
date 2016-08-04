@@ -1,3 +1,4 @@
+// #docplaster
 // #docregion
 import { Routes } from '@angular/router';
 
@@ -8,6 +9,10 @@ import { CrisisAdminComponent }  from './crisis-admin.component';
 
 import { CanDeactivateGuard }    from '../can-deactivate-guard.service';
 import { AuthGuard }             from '../auth-guard.service';
+// #docregion crisis-detail-resolve
+import { CrisisDetailResolve }   from './crisis-detail-resolve.service';
+
+// #enddocregion crisis-detail-resolve
 
 export const crisisCenterRoutes: Routes = [
   {
@@ -26,10 +31,15 @@ export const crisisCenterRoutes: Routes = [
         canActivate: [AuthGuard]
       },
       // #enddocregion admin-route
+      // #docregion crisis-detail-resolve
       {
         path: ':id',
         component: CrisisDetailComponent,
-        canDeactivate: [CanDeactivateGuard]
+        canDeactivate: [CanDeactivateGuard],
+        resolve: {
+          crisis: CrisisDetailResolve
+        }
+      // #enddocregion crisis-detail-resolve
       },
       {
         path: '',

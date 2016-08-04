@@ -1,12 +1,11 @@
 // #docplaster
 // #docregion
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute }       from '@angular/router';
+import { Component, OnInit }      from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { Crisis, CrisisService }  from './crisis.service';
-import { DialogService }          from '../dialog.service';
-import { Observable }             from 'rxjs/Observable';
-import { Subscription }           from 'rxjs/Subscription';
+import { Crisis }         from './crisis.service';
+import { DialogService }  from '../dialog.service';
+import { Observable }     from 'rxjs/Observable';
 
 @Component({
   template: `
@@ -27,40 +26,24 @@ import { Subscription }           from 'rxjs/Subscription';
   styles: ['input {width: 20em}']
 })
 
-export class CrisisDetailComponent implements OnInit, OnDestroy {
+export class CrisisDetailComponent implements OnInit {
   crisis: Crisis;
   editName: string;
-  private sub: Subscription;
 
   constructor(
-    private service: CrisisService,
     private route: ActivatedRoute,
     private router: Router,
     public dialogService: DialogService
     ) { }
 
+// #docregion crisis-detail-resolve
   ngOnInit() {
-    this.sub = this.route
-      .params
-      .subscribe(params => {
-        let id = +params['id'];
-        this.service.getCrisis(id)
-          .then(crisis => {
-            if (crisis) {
-              this.editName = crisis.name;
-              this.crisis = crisis;
-            } else { // id not found
-              this.gotoCrises();
-            }
-          });
-      });
+    this.route.data.forEach((data: { crisis: Crisis }) => {
+      this.editName = data.crisis.name;
+      this.crisis = data.crisis;
+    });
   }
-
-  ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
+// #enddocregion crisis-detail-resolve
 
   cancel() {
     this.gotoCrises();
