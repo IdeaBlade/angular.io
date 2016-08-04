@@ -1,12 +1,10 @@
 // #docplaster
 // #docregion
-import { RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { CrisisListComponent } from './crisis-center/crisis-list.component';
-import { heroesRoutes }        from './heroes/heroes.routes';
 
-export const routes: RouterConfig = [
-  ...heroesRoutes,
+export const appRoutes: Routes = [
   { path: 'crisis-center', component: CrisisListComponent }
 ];
 

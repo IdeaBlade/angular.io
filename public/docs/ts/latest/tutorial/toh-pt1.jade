@@ -20,6 +20,7 @@ include ../_quickstart_repo
     .file app
     .children
       .file app.component.ts
+      .file app.module.ts
       .file main.ts
     .file node_modules ...
     .file typings ...
@@ -142,11 +143,11 @@ code-example(language="bash").
   In short, we want two-way data binding.
 
   Before we can use two-way data binding for **form inputs**, we need to import the `FormsModule`
-  package and add it as the second argument in our bootstrap function. The second argument takes
-  an object where we define our `imports` as an array. We add the `FormsModule` package to our imports
-  and now we have included the forms package which includes `ngModel`.
+  package and add it to the `NgModule` decorator's `imports` array. This array contains the list
+  of external modules used by our application.
+  Now we have included the forms package which includes `ngModel`.
 
-+makeExample('toh-1/ts/app/main.ts', '', 'app.component.ts (FormsModule import)')
++makeExample('toh-1/ts/app/app.module.ts', '', 'app.module.ts (FormsModule import)')
 
 .l-sub-section
   :marked
@@ -171,7 +172,7 @@ code-example(language="html").
   ## The Road We’ve Travelled
   Let’s take stock of what we’ve built.
 
-  * Our Tour of Heroes uses the double curly braces of interpolation (a form of one-way data binding)
+  * Our Tour of Heroes uses the double curly braces of interpolation (a kind of one-way data binding)
   to display the application title and properties of a `Hero` object.
   * We wrote a multi-line template using ES2015’s template strings to make our template readable.
   * We can both display and change the hero’s name after adding a two-way data binding to the `<input>` element
@@ -190,5 +191,5 @@ code-example(language="html").
   Our Tour of Heroes only displays one hero and we really want to display a list of heroes.
   We also want to allow the user to select a hero and display their details.
   We’ll learn more about how to retrieve lists, bind them to the
-  template, and allow a user to select it in the
+  template, and allow a user to select a hero in the
   [next tutorial chapter](./toh-pt2.html).

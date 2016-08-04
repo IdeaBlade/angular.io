@@ -1,18 +1,13 @@
 // #docregion
-import { RouterConfig }  from '@angular/router';
-
-import { crisisCenterRoutes } from './crisis-center/crisis-center.routes';
-import { heroesRoutes }       from './heroes/heroes.routes';
+import { Routes } from '@angular/router';
 
 import { loginRoutes,
-         authProviders }      from './login.routes';
+         authProviders }  from './login.routes';
 
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
 
-export const routes: RouterConfig = [
-  ...heroesRoutes,
-  ...loginRoutes,
-  ...crisisCenterRoutes
+export const appRoutes: Routes = [
+  ...loginRoutes
 ];
 
 export const appRouterProviders: any[] = [

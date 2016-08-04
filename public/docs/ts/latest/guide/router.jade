@@ -83,7 +83,7 @@ include ../_util-fns
   It is not part of the Angular 2 core. It is in its own library package, `@angular/router`.
   We import what we need from it as we would from any other Angular package.
 
-+makeExample('router/ts/app/main.1.ts','import-router', 'app/main.ts (import)')(format=".")
++makeExample('router/ts/app/app.module.1.ts','import-router', 'app/app.module.ts (import)')(format=".")
 .l-sub-section
   :marked
     We cover other options in the [details below](#browser-url-styles).
@@ -100,7 +100,7 @@ include ../_util-fns
 
 .l-sub-section
   :marked
-    The `RouterConfig` is an array of *routes* that describe how to navigate.
+    The `Routes` is an array of *routes* that describe how to navigate.
     Each *Route* maps a URL `path` to a component.
 
     There are no **leading slashes** in our **path**. The router parses and builds the URL for us,
@@ -116,14 +116,11 @@ include ../_util-fns
     displaying a 404 page or redirecting to another route.
 
 :marked
-    We export the configuration array so we can import it into our `main.ts` file where we'll provide
+    We export the configuration array so we can import it into our `app.module.ts` file where we'll provide
     a configured *Router* module.
-
-    So we can simplify registration of router dependencies later in `main.ts`, well export any empty array of `appRouterProviders`.
-    We don't have any other providers to register right now. But we will.
 :marked
-  Next we open `main.ts` where we must register our router module and application router providers in the second argument of the `bootstrap` method.
-+makeExample('router/ts/app/main.ts','','app/main.ts')(format='.')
+  Next we open `app.module.ts` where we must register our router module with routes, and declare our two route components.
++makeExample('router/ts/app/app.module.1.ts','router-basics','app/app.module.ts (basic setup)')(format='.')
 :marked
   ### Router Outlet
   Given this configuration, when the browser URL for this application becomes `/heroes`,
@@ -171,9 +168,7 @@ code-example(format="", language="html").
   application using the `Router` service and the `routerState` property.
 
   The router state provides us with methods to traverse up and down the route tree from any activated route
-  to get information we may need from parent, child and sibling routes. It also contains the URL *fragment*
-  and *query parameters* which are available to all routes. We'll use the `RouterState` to access
-  [Query Parameters](#query-parameters).
+  to get information we may need from parent, child and sibling routes.
 
 :marked
   ### Let's summarize
@@ -196,11 +191,11 @@ table
     td <code>RouterModule</code>
     td.
       A separate Angular module that provides the necessary service providers
-      for navigation through application views.
+      and directives for navigating through application views.
   tr
-    td <code>RouterConfig</code>
+    td <code>Routes</code>
     td.
-      Contains an array of Routes, each mapping a URL path to a component.
+      Defines an array of Routes, each mapping a URL path to a component.
   tr
     td <code>Route</code>
     td.
@@ -222,11 +217,15 @@ table
       The directive for adding/removing classes from an HTML element when an associated
       routerLink contained on or inside the element becomes active/inactive.
   tr
+    td <code>ActivatedRoute</code>
+    td.
+      A service that is provided to each route component that contains route specific
+      information such as route parameters, resolve data, global query params and the global fragment.
+  tr
     td <code>RouterState</code>
     td.
       The current state of the router including a tree of the currently activated
-      routes in our application along with the URL query params, fragment
-      and convenience methods for traversing the route tree.
+      routes in our application along convenience methods for traversing the route tree.
   tr
     td <code><i>Link Parameters Array</i></code>
     td.
@@ -317,6 +316,7 @@ figure.image-display
 :marked
   This app illustrates the router features we'll cover in this chapter
 
+  * organizing the application features into modules
   * navigating to a component (*Heroes* link to "Heroes List")
   * including a route parameter (passing the Hero `id` while routing to the "Hero Detail")
   * child routes (the *Crisis Center* has its own routes)
@@ -334,7 +334,6 @@ figure.image-display
 
 <a id="base-href"></a>
 :marked
-  <a id="base-href"></a>
   ### Set the *&lt;base href>*
   The Component Router uses the browser's
   [history.pushState](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
@@ -385,7 +384,9 @@ figure.image-display
     Such *asynchronous routing* can make our application launch more quickly.
     We'll cover asynchronous routing in a future chapter update.
 :marked
-  Here is our first configuration.
+  Here is our first configuration. We also export an empty `appRouterProviders` array
+  so we can simplify registration of router dependencies later in `app.module.ts`.
+  We don't have any providers to register right now. But we will.
 
 +makeExample('router/ts/app/app.routes.2.ts','', 'app/app.routes.ts')(format=".")
 
@@ -425,20 +426,22 @@ h4#define-routes Define routes
   :marked
     Learn about *providers* in the [Dependency Injection](dependency-injection.html#!#injector-providers) chapter.
 
-h4#register-providers Register routing in bootstrap
+h4#register-providers Register routing in the root NgModule
 :marked
-  Our app launches from the `main.ts` file in the `/app` folder.
+  Our app launches from the `app.module.ts` file in the `/app` folder.
 
   We import the route configuration and pass it to the `RouterModule.forRoot` function
-  which returns an array containing the configured `Router` service provider ... and some other,
+  which returns a module containing the configured `Router` service provider ... and some other,
   unseen providers that the routing library requires. The configured `RouterModule` is added to the
-  second parameter of the `bootstrap` function in the `imports` array.
+  `imports` array.
 
-  We also import the `appRouterProviders` array and add it to the second parameter
-  of the `bootstrap` function in the `providers` array.
-+makeExample('router/ts/app/main.1.ts','all', 'main.ts')(format=".")
+  We import our `CrisisListComponent` and `HeroListComponent` components and add them to our *declarations*
+  so they will be registered within our root NgModule.
+
+  We also import the `appRouterProviders` array and add it to the `providers` array.
++makeExample('router/ts/app/app.module.1.ts','', 'app.module.ts')(format=".")
 :marked
-  Providing the router module at bootstrap makes the Router available everywhere in our application.
+  Providing the router module in our root NgModule makes the Router available everywhere in our application.
 
 h3#shell The <i>AppComponent</i> shell
 :marked
@@ -493,11 +496,10 @@ h3#router-link <i>RouterLinkActive</i> binding
   To override this behavior, we can bind to the `[routerLinkActiveOptions]` input binding with the `{ exact: true }` expression.
   By using `{ exact: true }`, a given `RouterLink` will only be active if its URL is an exact match to the current URL.
 
-h3#router-directives <i>ROUTER_DIRECTIVES</i>
+h3#router-directives <i>Router Directives</i>
 :marked
-  `RouterLink`, `RouterLinkActive` and `RouterOutlet` are directives in the `ROUTER_DIRECTIVES` collection.
-  Remember to add them to the `directives` array of the `@Component` metadata.
-+makeExample('router/ts/app/app.component.1.ts','directives')(format=".")
+  `RouterLink`, `RouterLinkActive` and `RouterOutlet` are directives provided by the Angular `RouterModule` package.
+  They are readily available for us to use in our template.
 :marked
   The current state of `app.component.ts` looks like this:
 +makeExample('router/ts/app/app.component.1.ts','', 'app/app.component.ts')(format=".")
@@ -511,7 +513,7 @@ h3#router-directives <i>ROUTER_DIRECTIVES</i>
   We've learned how to
   * load the router library
   * add a nav bar to the shell template with anchor tags, `routerLink`  and `routerLinkActive` directives
-  * added a `router-outlet` to the shell template where views will be displayed
+  * add a `router-outlet` to the shell template where views will be displayed
   * configure the router module with `RouterModule.forRoot`
   * set the router to compose "HTML 5" browser URLs.
 
@@ -525,6 +527,7 @@ h3#router-directives <i>ROUTER_DIRECTIVES</i>
     .file app
       .children
         .file app.component.ts
+        .file app.module.ts
         .file app.routes.ts
         .file crisis-list.component.ts
         .file hero-list.component.ts
@@ -540,13 +543,15 @@ h3#router-directives <i>ROUTER_DIRECTIVES</i>
   Here are the files discussed in this milestone
 +makeTabs(
   `router/ts/app/app.component.1.ts,
+  router/ts/app/app.module.1.ts,
   router/ts/app/app.routes.2.ts,
-  router/ts/app/main.1.ts,
+  router/ts/app/main.ts,
   router/ts/app/hero-list.component.ts,
   router/ts/app/crisis-list.component.ts,
   router/ts/index.html`,
-  ',,all,,',
+  ',,,,',
   `app.component.ts,
+  app.module.ts,
   app.routes.ts,
   main.ts,
   hero-list.component.ts,
@@ -559,7 +564,7 @@ h2#heroes-feature Milestone #2: The Heroes Feature
   We've seen how to navigate using the `RouterLink` directive.
 
   Now we'll learn some new tricks such as how to
-  * organize our app into *feature areas*
+  * organize our app and routes into *feature areas* using modules
   * navigate imperatively from one component to another
   * pass information in route parameters
 
@@ -586,6 +591,10 @@ figure.image-display
 :marked
   ### Add Heroes functionality
 
+  We want to break our app out into different *sub-modules* that we then import
+  into our main module so it can make use of them. First, we'll create a `heroes.module.ts`
+  in our heroes folder.
+
   We delete the placeholder `hero-list.component.ts` that's in
   the `app/` folder.
 
@@ -594,7 +603,15 @@ figure.image-display
   We copy the `hero-detail.component.ts` and the `hero.service.ts` files
   into the `heroes/` folder.
 
-  When we're done organizing, we have three *Hero Management* files:
+  We provide the `HeroService` in the `providers` array of our `Heroes` module
+  so its available to all components within our module. We also make our `HeroListComponent`
+  and `HeroDetailComponent` available to other modules by adding them to the `exports` array.
+
+  Our `Heroes` module is ready for routing.
++makeExample('router/ts/app/heroes/heroes.module.1.ts','', 'app/heroes/heroes.module.ts')(format=".")
+
+:marked
+  When we're done organizing, we have four *Hero Management* files:
 
 .filetree
   .file app/heroes
@@ -602,11 +619,9 @@ figure.image-display
     .file hero-detail.component.ts
     .file hero-list.component.ts
     .file hero.service.ts
+    .file heroes.module.ts
 
 :marked
-  We provide the `HeroService` in the application root `AppComponent`
-  so that it is available everywhere in the app.
-
   Now it's time for some surgery to bring these files and the rest of the app
   into alignment with our application router.
 
@@ -632,8 +647,20 @@ figure.image-display
   We use the same techniques we learned for `app.routes.ts`.
 
   We import the two components from their new locations in the `app/heroes/` folder, define the two hero routes.
-  and add them to an exported `HeroesRoutes` array.
+  and add them to an exported `heroesRoutes` array.
 
+:marked
+  Now that we have routes for our `Heroes` module, we'll need to register them with the *Router*.
+  We'll import the *RouterModule* like we did in the root NgModule, but there is a slight difference here.
+  In our root NgModule, we used the static **forRoot** method to register our routes and application level
+  service providers. Since we are in a sub-module, we'll use **Router.forChild** method to only register additional routes. We do this
+  because the *Router* will combine all the provided routes in the together and build our configuration. This allows us to continue defining
+  our feature-specific routes without modifying our main route configuration.
+
+  We import our `heroes.routes.ts` file into our `Heroes` module and register the routes.
++makeExample('router/ts/app/heroes/heroes.module.ts', 'heroes-routes', 'app/heroes/heroes.module.ts (Heroes routes)')(format=".")
+
+:marked
   ### Route definition with a parameter
   The route to `HeroDetailComponent` has a twist.
 +makeExample('router/ts/app/heroes/heroes.routes.ts','hero-detail-route')(format=".")
@@ -657,22 +684,6 @@ code-example(format="." language="bash").
     a route for some other hero.
 
     An [optional-route-parameter](#optional-route-parameter) might be a better choice if we were passing an *optional* value to `HeroDetailComponent`.
-
-h3#merge-hero-routes Merge hero routes into application routes
-:marked
-  Our application doesn't know about our hero routes yet.
-  We'll need to merge them into the application routes we defined in `app.routes.ts`.
-
-  Update `app.routes.ts` as follows:
-+makeExample('router/ts/app/app.routes.3.ts', '', 'app/app.routes.ts (v.2)')(format=".")
-:marked
-  We replace the `HeroListComponent` import with an `HeroesRoutes` import.
-
-  We *flatten* the `HeroesRoutes` into the `routes` array with the ES6 *spread operator* (`...`).
-
-  As a result, the `app.routes.ts` no longer has specific knowledge of the hero feature, its components, or its route details.
-  It won't change as we evolve the hero feature with more components and different routes.
-  That's a key benefit of creating a separate route configuration for each feature area.
 
 h3#navigate Navigate to hero detail imperatively
 :marked
@@ -804,6 +815,31 @@ h3#nav-to-list Navigating back to the list component
   that we can bind to a `[routerLink]` directive.
   It holds the **path to the `HeroListComponent`**:
 +makeExample('router/ts/app/heroes/hero-detail.component.1.ts','gotoHeroes')(format=".")
+
+h3#merge-hero-routes Import hero module into root NgModule
+:marked
+  Our heroes feature is ready, but application doesn't know about our heroes module yet.
+  We'll need to import it into the root NgModule we defined in `app.module.ts`.
+
+  Update `app.module.ts` as follows:
+
++makeExample('router/ts/app/app.module.2.ts','hero-import', 'app.module.ts (Heroes module import)')(format=".")
+
+:marked
+  We imported the `HeroesModule` and added it to our root NgModule `imports`.
+
+  We removed the `HeroListComponent` from the root NgModule's `declarations` because its being provided by the `HeroesModule`
+  now. This is important because their can be only **one** owner for a declared component. In our case, the `Heroes` module is
+  the owner of the `Heroes` components and is exporting them to make them available to the root NgModule.
+
+  As a result, the `app.module.ts` no longer has specific knowledge of the hero feature, its components, or its route details.
+  We can evolve the hero feature with more components and different routes.
+  That's a key benefit of creating a separate module for each feature area.
+
+  Since our `Heroes` routes are defined within our sub-module, we can also remove our initial `heroes` route from the `app.routes.ts`.
+
++makeExample('router/ts/app/app.routes.3.ts','', 'app.routes.ts (v.2)')(format=".")
+
 :marked
   ### Heroes App Wrap-up
 
@@ -813,6 +849,7 @@ h3#nav-to-list Navigating back to the list component
   * organize our app into *feature areas*
   * navigate imperatively from one component to another
   * pass information along in route parameters and subscribe to them in our component
+  * import our feature area NgModule into our root NgModule
 
   After these changes, the folder structure looks like this:
 .filetree
@@ -825,8 +862,10 @@ h3#nav-to-list Navigating back to the list component
         .file hero-detail.component.ts
         .file hero-list.component.ts
         .file hero.service.ts
+        .file heroes.module.ts
         .file heroes.routes.ts
       .file app.component.ts
+      .file app.module.ts
       .file app.routes.ts
       .file crisis-list.component.ts
       .file main.ts
@@ -843,17 +882,21 @@ h3#nav-to-list Navigating back to the list component
   Here are the relevant files for this version of the sample application.
 +makeTabs(
   `router/ts/app/app.component.1.ts,
+   router/ts/app/app.module.2.ts,
    router/ts/app/app.routes.3.ts,
    router/ts/app/heroes/hero-list.component.1.ts,
    router/ts/app/heroes/hero-detail.component.1.ts,
    router/ts/app/heroes/hero.service.ts,
+   router/ts/app/heroes/heroes.module.ts,
    router/ts/app/heroes/heroes.routes.ts`,
    null,
   `app.component.ts,
+  app.module.ts,
   app.routes.ts,
   hero-list.component.ts,
   hero-detail.component.ts,
   hero.service.ts,
+  heroes.module.ts,
   heroes.routes.ts`)
 :marked
 
@@ -863,7 +906,7 @@ h3#nav-to-list Navigating back to the list component
   ## Milestone #3: The Crisis Center
   The *Crisis Center* is a fake view at the moment. Time to make it useful.
 
-  The new *Crisis Center* begins as a virtual copy of the *Heroes* feature.
+  The new *Crisis Center* begins as a virtual copy of the *Heroes* module.
   We create a new `app/crisis-center` folder, copy the Hero files,
   and change every mention of "hero" to "crisis".
 
@@ -872,7 +915,7 @@ h3#nav-to-list Navigating back to the list component
   When the user selects a crisis, the app navigates to the `CrisisDetailComponent`
   for display and editing of the crisis name.
 
-  Voilà, instant feature module!
+  Voilà, another feature module!
 
   There's no point to this exercise unless we can learn something.
   We do have new ideas and techniques in mind:
@@ -887,10 +930,10 @@ h3#nav-to-list Navigating back to the list component
 
   * The router should block access to certain features until the user logs-in.
 
-  * Our `CrisisService` is only needed within the *Crisis Center* feature area.
-  We should limit access to it to that feature area.
+  * Our `CrisisService` is only needed within the *Crisis Center* module.
+  We should limit access to it to that module.
 
-  * Changes to a sub-module such as *Crisis Center* shouldn't provoke changes to the `AppComponent` or
+  * Changes to a sub-module such as *Crisis Center* shouldn't provoke changes to the root `NgModule` or
   any other feature's component.
   We need to [*separate our concerns*](https://blog.8thlight.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html).
 
@@ -906,7 +949,7 @@ h3#nav-to-list Navigating back to the list component
   ### A Crisis Center with child routes
 
   We'll organize the *Crisis Center* to conform to the following recommended pattern for Angular applications.
-  * each feature area in its own folder
+  * each feature area in its own folder within a defined module
   * each area with its own area root component
   * each area root component with its own router-outlet and child routes
   * area routes rarely (if ever) cross
@@ -919,7 +962,7 @@ figure.image-display
 h3#child-routing-component Child Routing Component
 :marked
   Add the following `crisis-center.component.ts` to the `crisis-center` folder:
-+makeExample('router/ts/app/crisis-center/crisis-center.component.1.ts', 'minus-imports', 'crisis-center/crisis-center.component.ts (minus imports)')(format='.')
++makeExample('router/ts/app/crisis-center/crisis-center.component.ts', 'minus-imports', 'crisis-center/crisis-center.component.ts (minus imports)')(format='.')
 :marked
   The `CrisisCenterComponent` is much like the `AppComponent` shell.
 
@@ -943,14 +986,14 @@ h3#child-routing-component Child Routing Component
 :marked
   ### Service isolation
 
-  The`CrisisService` is neither needed nor wanted outside the *Crisis Center* domain.
-  Instead of registering it with the root `AppComponent` providers &mdash;
+  The `CrisisService` is neither needed nor wanted outside the *Crisis Center* domain.
+  Instead of registering it with the root NgModule's providers &mdash;
   which makes it visible everywhere &mdash;
-  we register the `CrisisService` in the component's providers array.
-+makeExample('router/ts/app/crisis-center/crisis-center.component.1.ts', 'providers')(format='.')
+  we register the `CrisisService` in the `Crisis Center` modules's providers array.
++makeExample('router/ts/app/crisis-center/crisis-center.module.1.ts', 'providers')(format='.')
 :marked
-  This limits the scope of the `CrisisService` to the *Crisis Center* component and its sub-component tree.
-  No component outside of the *Crisis Center* can access it.
+  This limits the scope of the `CrisisService` to the *Crisis Center* module and its components.
+  No module outside of the *Crisis Center* can access it.
 
   There's a practical benefit to restricting its scope in this way.
 
@@ -1003,13 +1046,16 @@ code-example(format="").
   Here's the complete `crisis-center.routes.ts` with its imports.
 +makeExample('router/ts/app/crisis-center/crisis-center.routes.1.ts', '', 'app/crisis-center/crisis-center.routes.ts' )(format='.')
 
-h3#merge-crisis-routes Merge crisis routes into the application routes
+h3#import-crisis-module Import crisis center module into the root NgModule routes
 :marked
-  As with hero routes, we must update the router configuration at the top of the application
-  by merging the crisis routes into the app routes:
-+makeExample('router/ts/app/app.routes.4.ts', '', 'app/app.routes.ts' )(format='.')
+  As with the `Heroes` module, we must import the `Crisis Center` module into the root NgModule:
++makeExample('router/ts/app/app.module.3.ts', '', 'app/app.module.ts (Crisis Center Module)' )(format='.')
 :marked
-  We used the spread operator again (...) to insert the crisis routes array.
+  We also remove the initial crisis center route from our `app.routes.ts`. Our routes
+  are now being provided by our `HeroesModule` and our `CrisisCenter` sub-modules. We'll keep our `app.routes.ts` file
+  for general routes which we'll cover later in the chapter.
+
++makeExample('router/ts/app/app.routes.4.ts', '', 'app/app.routes.ts (v.3)' )(format='.')
 
 a#redirect
 h3#redirect Redirecting routes
@@ -1084,7 +1130,7 @@ h2#guards Route Guards
   The guard could ask the user a question, save changes to the server, or fetch fresh data.
   These are all asynchronous operations.
 
-  Accordingly, a routing guard can return an `Observable<boolean>` and the
+  Accordingly, a routing guard can return an `Observable<boolean>` or a `Promise<boolean>` and the
   router will wait for the observable to resolve to `true` or `false`.
 
   The router supports two kinds of guards:
@@ -1193,16 +1239,21 @@ h3#can-activate-guard <i>CanActivate</i>: requiring authentication
   We need a `LoginComponent` for the user to log in to the app. After logging in, we'll redirect
   to our stored URL if available, or use the default URL.
   There is nothing new about this component or the way we wire it into the router configuration.
-  Here is the pertinent code, offered without comment:
+
+  We'll register a `/login` route in our `app.routes.ts` and add the necessary providers to the `appRouterProviders`
+  array we created earlier. In our `app.module.ts`, we'll import the `LoginComponent` and add it to our root NgModule `declarations`.
+
 +makeTabs(
-   `router/ts/app/login.component.1.ts,
-   router/ts/app/login.routes.ts,
-   router/ts/app/app.routes.5.ts
+   `router/ts/app/app.module.ts,
+   router/ts/app/app.routes.5.ts,
+   router/ts/app/login.component.1.ts,
+   router/ts/app/login.routes.ts
   `,
   null,
-   `app/login.component.ts,
-   app/login.routes.ts,
-   app/app.routes.ts
+   `app/app.module.ts,
+   app/app.routes.ts,
+   app/login.component.ts,
+   app/login.routes.ts
   `)
 
 h3#can-deactivate-guard <i>CanDeactivate</i>: handling unsaved changes
@@ -1259,13 +1310,11 @@ h3#can-deactivate-guard <i>CanDeactivate</i>: handling unsaved changes
     by waiting for the user's answer asynchronously. Waiting for the user asynchronously
     is like waiting for the server asynchronously.
 :marked
-  The `DialogService` (injected in the `AppComponent` for app-wide use) does the asking.
+  The `DialogService` (provided in the root `NgModule` for app-wide use) does the asking.
 
   It returns a [promise](http://exploringjs.com/es6/ch_promises.html) that
   *resolves* when the user eventually decides what to do: either
   to discard changes and navigate away (`true`) or to preserve the pending changes and stay in the crisis editor (`false`).
-
-  We will take the result of that promise and convert it to an `Observable` for our guard to use.
 
 <a id="CanDeactivate"></a>
 :marked
@@ -1273,14 +1322,22 @@ h3#can-deactivate-guard <i>CanDeactivate</i>: handling unsaved changes
   case being `CrisisDetailComponent`. We don't need to know the details of how our `CrisisDetailComponent` confirms deactivation.
   This makes our guard reusable, which is an easy win for us.
 +makeExample('router/ts/app/can-deactivate-guard.service.ts', '', 'can-deactivate-guard.service.ts')
+
 :marked
-  Looking at our `CrisisDetailComponent`, we have implemented our confirmation workflow for unsaved changes.
+  Alternatively, We could make a component-specific `CanDeactivate` guard for our `CrisisDetailComponent`. The `canDeactivate` method provides us
+  with the current instance of our `component`, the current `ActivatedRoute` and `RouterStateSnapshot` in case we needed to access
+  some external information. This would be useful if we only wanted to use this guard for this component and needed to ask the component's
+  properties in or to confirm whether the router should allow navigation away from it.
++makeExample('router/ts/app/can-deactivate-guard.service.1.ts', '', 'can-deactivate-guard.service.ts (component-specific)')
+
+:marked
+  Looking back at our `CrisisDetailComponent`, we have implemented our confirmation workflow for unsaved changes.
 
 +makeExample('router/ts/app/crisis-center/crisis-detail.component.1.ts', 'cancel-save-only', 'crisis-detail.component.ts (excerpt)')
 :marked
   Notice that the `canDeactivate` method *can* return synchronously;
   it returns `true` immediately if there is no crisis or there are no pending changes.
-  But it can also return a promise or an `Observable` and the router will wait for that
+  But it can also return a `Promise` or an `Observable` and the router will wait for that
   to resolve to truthy (navigate) or falsey (stay put).
 
 :marked
@@ -1502,7 +1559,7 @@ figure.image-display
 
 +makeExample('router/ts/app/crisis-center/crisis-admin.component.ts','', 'crisis-admin.component.ts (v.2)')
 :marked
-  *Query Parameters* and *Fragments* are available through the `routerState` property in our `Router` service.
+  *Query Parameters* and *Fragments* are also available through the `ActivatedRoute` service available to route components.
   Just like our *route parameters*, query parameters and fragments are provided as an `Observable`.
   For our updated *Crisis Admin* component we'll feed the `Observable` directly into our template using the `AsyncPipe`, which
   will handle _unsubscribing_ from the `Observable` for us when the component is destroyed.
@@ -1710,5 +1767,5 @@ code-example(format=".", language="bash").
   ### *HashLocationStrategy*
   We can go old-school with the `HashLocationStrategy` by
   providing the `useHash: true` in an object as the second argument of the `RouterModule.forRoot`
-  during application bootstrapping.
-+makeExample('router/ts/app/main.2.ts','', 'main.ts (hash URL strategy)')
+  in our root NgModule.
++makeExample('router/ts/app/app.module.4.ts','', 'app.module.ts (hash URL strategy)')

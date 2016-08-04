@@ -1,12 +1,8 @@
 // #docregion
-import { RouterConfig }  from '@angular/router';
+import { Routes }  from '@angular/router';
 
-import { crisisCenterRoutes } from './crisis-center/crisis-center.routes';
-import { heroesRoutes }       from './heroes/heroes.routes';
+export const routes: Routes = [
 
-export const routes: RouterConfig = [
-  ...heroesRoutes,
-  ...crisisCenterRoutes
 ];
 
 export const appRouterProviders: any[] = [
