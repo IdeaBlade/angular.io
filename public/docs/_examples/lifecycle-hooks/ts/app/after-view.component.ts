@@ -28,8 +28,7 @@ export class ChildViewComponent {
     <p *ngIf="comment" class="comment">
       {{comment}}
     </p>
-  `,
-  directives: [ChildViewComponent]
+  `
 })
 // #docregion hooks
 export class AfterViewComponent implements  AfterViewChecked, AfterViewInit {
@@ -100,8 +99,7 @@ export class AfterViewComponent implements  AfterViewChecked, AfterViewInit {
   </div>
   `,
   styles: ['.parent {background: burlywood}'],
-  providers: [LoggerService],
-  directives: [AfterViewComponent]
+  providers: [LoggerService]
 })
 export class AfterViewParentComponent {
   logs: string[];

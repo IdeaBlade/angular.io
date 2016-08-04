@@ -11,16 +11,7 @@ import { SpyParentComponent } from './spy.component';
 
 @Component({
   selector: 'my-app',
-  templateUrl: 'app/app.component.html',
-  directives: [
-    AfterContentParentComponent,
-    AfterViewParentComponent,
-    CounterParentComponent,
-    DoCheckParentComponent,
-    OnChangesParentComponent,
-    PeekABooParentComponent,
-    SpyParentComponent,
-  ]
+  templateUrl: 'app/app.component.html'
 })
 export class AppComponent {
 }
