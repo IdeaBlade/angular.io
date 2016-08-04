@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 
-export const route =  { path: '07-04', component: AppComponent };
-
 @NgModule({
-  imports: [ BrowserModule ],
+  imports: [
+    BrowserModule,
+    RouterModule.forChild([{ path: '07-04', component: AppComponent }])
+  ],
   declarations: [
     AppComponent
   ],

@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HighlightDirective } from './shared';
 
-export const route =  { path: '06-01', component: AppComponent };
-
 @NgModule({
+  imports: [
+    RouterModule.forChild([{ path: '06-01', component: AppComponent }])
+  ],
   declarations: [
     AppComponent,
     HighlightDirective

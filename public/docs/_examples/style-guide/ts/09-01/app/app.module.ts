@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HeroButtonComponent } from './heroes';
 
-export const route =  { path: '09-01', component: AppComponent };
-
 @NgModule({
+  imports: [
+    RouterModule.forChild([{ path: '09-01', component: AppComponent }])
+  ],
   declarations: [
     AppComponent,
     HeroButtonComponent

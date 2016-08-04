@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ValidateDirective } from './shared';
 
-export const route =  { path: '02-08', component: AppComponent };
-
 @NgModule({
+  imports: [
+    RouterModule.forChild([{ path: '02-08', component: AppComponent }])
+  ],
   declarations: [
     AppComponent,
     ValidateDirective

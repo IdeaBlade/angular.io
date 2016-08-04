@@ -1,12 +1,18 @@
 // #docregion
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HeroesComponent } from './heroes/heroes.component';
 
 @NgModule({
-  imports: [ BrowserModule ],
+  imports: [
+    BrowserModule,
+    // #enddocregion
+    RouterModule.forChild([{ path: '01-01', component: AppComponent }])
+    // #docregion
+  ],
   declarations: [
     AppComponent,
     HeroesComponent
@@ -17,4 +23,4 @@ import { HeroesComponent } from './heroes/heroes.component';
 export class AppModule { }
 // #enddocregion
 
-export const route =  { path: '01-01', component: AppComponent };
+
