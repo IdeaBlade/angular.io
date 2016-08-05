@@ -9,5 +9,6 @@ export const loginRoutes: Routes = [
 ];
 
 export const authProviders = [
-  AuthGuard,AuthService
+  AuthGuard,
+  AuthService
 ];

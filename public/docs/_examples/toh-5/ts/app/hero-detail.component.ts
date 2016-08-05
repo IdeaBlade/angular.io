@@ -1,7 +1,7 @@
 // #docplaster
 // #docregion
 // #docregion import-oninit, v2
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 // #enddocregion import-oninit
 // #docregion import-activated-route
 import { ActivatedRoute, Params } from '@angular/router';
