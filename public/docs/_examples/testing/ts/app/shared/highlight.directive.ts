@@ -1,4 +1,3 @@
-// #docregion
 import { Directive, ElementRef, Input, OnChanges, Renderer } from '@angular/core';
 
 @Directive({ selector: '[highlight]' })

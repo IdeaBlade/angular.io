@@ -1,4 +1,3 @@
-// #docplaster
 import {
   BagModule,
   BankAccountComponent, BankAccountParentComponent,
@@ -31,7 +30,6 @@ import { addMatchers, newEvent, click } from '../../testing';
 beforeEach( addMatchers );
 
 ////////  Service Tests  /////////////
-// #docregion FancyService
 describe('use inject helper in beforeEach', () => {
   let service: FancyService;
 
@@ -41,9 +39,8 @@ describe('use inject helper in beforeEach', () => {
     // `TestBed.get` returns the injectable or an
     //  alternative object (including null) if the service provider is not found.
     //  Of course it will be found in this case because we're providing it.
-    // #docregion testbed-get
+
     service = TestBed.get(FancyService, null);
-    // #enddocregion testbed-get
   });
 
   it('should use FancyService', () => {
@@ -72,14 +69,13 @@ describe('use inject helper in beforeEach', () => {
     );
   }));
 
-  // #enddocregion FancyService
   // See https://github.com/angular/angular/issues/10127
   xit('test should wait for FancyService.getObservableDelayValue', async(() => {
     service.getObservableDelayValue().subscribe(
       value => expect(value).toBe('observable delay value')
     );
   }));
-  // #docregion FancyService
+
   it('should allow the use of fakeAsync', fakeAsync(() => {
     let value: any;
     service.getAsyncValue().then((val: any) => value = val);
@@ -87,15 +83,14 @@ describe('use inject helper in beforeEach', () => {
     expect(value).toBe('async value');
   }));
 });
-// #enddocregion FancyService
+
 
 describe('use inject within `it`', () => {
-  // #docregion getTimeoutValue
+
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [FancyService] });
   });
 
-  // #enddocregion getTimeoutValue
 
   it('should use modified providers',
     inject([FancyService], (service: FancyService) => {
@@ -104,7 +99,6 @@ describe('use inject within `it`', () => {
     })
   );
 
-  // #docregion getTimeoutValue
   it('test should wait for FancyService.getTimeoutValue',
     async(inject([FancyService], (service: FancyService) => {
 
@@ -112,7 +106,7 @@ describe('use inject within `it`', () => {
       value => expect(value).toBe('timeout value')
     );
   })));
-  // #enddocregion getTimeoutValue
+
 });
 
 describe('using async(inject) within beforeEach', () => {

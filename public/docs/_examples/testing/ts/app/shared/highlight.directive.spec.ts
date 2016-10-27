@@ -1,11 +1,10 @@
 import { Component, DebugElement }   from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By }                        from '@angular/platform-browser';
 
 import { HighlightDirective } from './highlight.directive';
 import { newEvent }           from '../../testing';
 
-// #docregion test-component
 @Component({
   template: `
   <h2 highlight="yellow">Something Yellow</h2>
@@ -14,7 +13,7 @@ import { newEvent }           from '../../testing';
   <input #box [highlight]="box.value" value="cyan"/>`
 })
 class TestComponent { }
-// #enddocregion test-component
+
 
 describe('HighlightDirective', () => {
 
@@ -22,7 +21,7 @@ describe('HighlightDirective', () => {
   let des: DebugElement[];  // the three elements w/ the directive
   let bareH2: DebugElement; // the <h2> w/o the directive
 
-  // #docregion selected-tests
+
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
       declarations: [ HighlightDirective, TestComponent ]
@@ -74,7 +73,7 @@ describe('HighlightDirective', () => {
   it('bare <h2> should not have a customProperty', () => {
     expect(bareH2.properties['customProperty']).toBeUndefined();
   });
-  // #enddocregion selected-tests
+
 
   // injected directive
   // attached HighlightDirective can be injected

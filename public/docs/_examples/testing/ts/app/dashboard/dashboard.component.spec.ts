@@ -1,4 +1,3 @@
-// #docplaster
 import { async, inject, ComponentFixture, TestBed
 } from '@angular/core/testing';
 
@@ -12,11 +11,10 @@ import { Router } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardModule }    from './dashboard.module';
 
-// #docregion router-stub
 class RouterStub {
   navigateByUrl(url: string) { return url; }
 }
-// #enddocregion router-stub
+
 
 beforeEach ( addMatchers );
 
@@ -68,7 +66,6 @@ describe('DashboardComponent (shallow)', () => {
 
 /** Add TestBed providers, compile, and create DashboardComponent */
 function compileAndCreate() {
-  // #docregion compile-and-create-body
   beforeEach( async(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -80,7 +77,6 @@ function compileAndCreate() {
       fixture = TestBed.createComponent(DashboardComponent);
       comp = fixture.componentInstance;
     });
-    // #enddocregion compile-and-create-body
   }));
 }
 
@@ -123,10 +119,8 @@ function tests(heroClick: Function) {
       expect(heroes.length).toBe(4, 'should display 4 heroes');
     });
 
-    // #docregion navigate-test, inject
     it('should tell ROUTER to navigate when hero clicked',
       inject([Router], (router: Router) => { // ...
-    // #enddocregion inject
 
       const spy = spyOn(router, 'navigateByUrl');
 
@@ -139,9 +133,9 @@ function tests(heroClick: Function) {
       const id = comp.heroes[0].id;
       expect(navArgs).toBe('/heroes/' + id,
         'should nav to HeroDetail for first hero');
-    // #docregion inject
+
     }));
-    // #enddocregion navigate-test, inject
+
   });
 }
 

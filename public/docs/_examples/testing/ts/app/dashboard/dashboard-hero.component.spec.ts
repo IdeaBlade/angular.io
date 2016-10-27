@@ -18,7 +18,7 @@ describe('DashboardHeroComponent when tested directly', () => {
   let fixture: ComponentFixture<DashboardHeroComponent>;
   let heroEl: DebugElement;
 
-  // #docregion setup, compile-components
+
   // async beforeEach
   beforeEach( async(() => {
     TestBed.configureTestingModule({
@@ -26,7 +26,7 @@ describe('DashboardHeroComponent when tested directly', () => {
     })
     .compileComponents(); // compile template and css
   }));
-  // #enddocregion compile-components
+
 
   // synchronous beforeEach
   beforeEach(() => {
@@ -39,28 +39,25 @@ describe('DashboardHeroComponent when tested directly', () => {
     comp.hero = expectedHero;
     fixture.detectChanges(); // trigger initial data binding
   });
-  // #enddocregion setup
 
-  // #docregion name-test
+
   it('should display hero name', () => {
     const expectedPipedName = expectedHero.name.toUpperCase();
     expect(heroEl.nativeElement.textContent).toContain(expectedPipedName);
   });
-  // #enddocregion name-test
 
-  // #docregion click-test
+
+
   it('should raise selected event when clicked', () => {
     let selectedHero: Hero;
     comp.selected.subscribe((hero: Hero) => selectedHero = hero);
 
-  // #docregion trigger-event-handler
     heroEl.triggerEventHandler('click', null);
-  // #enddocregion trigger-event-handler
+
     expect(selectedHero).toBe(expectedHero);
   });
-  // #enddocregion click-test
 
-  // #docregion click-test-2
+
   it('should raise selected event when clicked', () => {
     let selectedHero: Hero;
     comp.selected.subscribe((hero: Hero) => selectedHero = hero);
@@ -68,17 +65,17 @@ describe('DashboardHeroComponent when tested directly', () => {
     click(heroEl);   // triggerEventHandler helper
     expect(selectedHero).toBe(expectedHero);
   });
-  // #enddocregion click-test-2
+
 });
 
 //////////////////
-
+/// Use a TEST HOST for @INPUT and @OUTPUT tests
 describe('DashboardHeroComponent when inside a test host', () => {
   let testHost: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let heroEl: DebugElement;
 
-  // #docregion test-host-setup
+
   beforeEach( async(() => {
     TestBed.configureTestingModule({
       declarations: [ DashboardHeroComponent, TestHostComponent ], // declare both
@@ -92,26 +89,26 @@ describe('DashboardHeroComponent when inside a test host', () => {
     heroEl   = fixture.debugElement.query(By.css('.hero')); // find hero
     fixture.detectChanges(); // trigger initial data binding
   });
-  // #enddocregion test-host-setup
 
-  // #docregion test-host-tests
+
+
   it('should display hero name', () => {
     const expectedPipedName = testHost.hero.name.toUpperCase();
     expect(heroEl.nativeElement.textContent).toContain(expectedPipedName);
   });
+
 
   it('should raise selected event when clicked', () => {
     click(heroEl);
     // selected hero should be the same data bound hero
     expect(testHost.selectedHero).toBe(testHost.hero);
   });
-  // #enddocregion test-host-tests
+
 });
 
 ////// Test Host Component //////
 import { Component } from '@angular/core';
 
-// #docregion test-host
 @Component({
   template: `
     <dashboard-hero  [hero]="hero"  (selected)="onSelected($event)"></dashboard-hero>`
@@ -121,4 +118,4 @@ class TestHostComponent {
   selectedHero: Hero;
   onSelected(hero: Hero) { this.selectedHero = hero; }
 }
-// #enddocregion test-host
+

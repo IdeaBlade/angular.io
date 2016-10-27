@@ -1,4 +1,3 @@
-// #docplaster
 import {
   async, ComponentFixture, fakeAsync, inject, TestBed, tick
 } from '@angular/core/testing';
@@ -34,7 +33,7 @@ describe('HeroDetailComponent', () => {
 
 ////////////////////
 function overrideSetup() {
-  // #docregion stub-hds
+
   class StubHeroDetailService {
     testHero = new Hero(42, 'Test Hero');
 
@@ -46,27 +45,26 @@ function overrideSetup() {
       return Promise.resolve(true).then(() => Object.assign(this.testHero, hero) );
     }
   }
-  // #enddocregion stub-hds
+
 
   // the `id` value is irrelevant because ignored by service stub
   beforeEach(() => activatedRoute.testParams = { id: 99999 } );
 
-  // #docregion setup-override
+
   beforeEach( async(() => {
     TestBed.configureTestingModule({
       imports:   [ HeroModule ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: Router,         useClass: RouterStub},
-  // #enddocregion setup-override
+
         // HeroDetailService at this level is IRRELEVANT!
         { provide: HeroDetailService, useValue: {} }
-  // #docregion setup-override
+
       ]
     })
 
     // Override component's own provider
-    // #docregion override-component-method
     .overrideComponent(HeroDetailComponent, {
       set: {
         providers: [
@@ -74,13 +72,11 @@ function overrideSetup() {
         ]
       }
     })
-    // #enddocregion override-component-method
 
     .compileComponents();
   }));
-  // #enddocregion setup-override
 
-  // #docregion override-tests
+
   let hds: StubHeroDetailService;
 
   beforeEach( async(() => {
@@ -108,7 +104,6 @@ function overrideSetup() {
     expect(hds.testHero.name).toBe(newName, 'service hero has new name after save');
     expect(page.navSpy.calls.any()).toBe(true, 'router.navigate called');
   }));
-  // #enddocregion override-tests
 
   it('fixture injected service is not the component injected service',
     inject([HeroDetailService], (service: HeroDetailService) => {
@@ -125,13 +120,13 @@ import { HeroService }             from '../model';
 const firstHero = HEROES[0];
 
 function heroModuleSetup() {
-  // #docregion setup-hero-module
+
   beforeEach( async(() => {
      TestBed.configureTestingModule({
       imports:   [ HeroModule ],
-  // #enddocregion setup-hero-module
+
   //  declarations: [ HeroDetailComponent ], // NO!  DOUBLE DECLARATION
-  // #docregion setup-hero-module
+
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: HeroService,    useClass: FakeHeroService },
@@ -140,9 +135,7 @@ function heroModuleSetup() {
     })
     .compileComponents();
   }));
-  // #enddocregion setup-hero-module
 
-  // #docregion route-good-id
   describe('when navigate to existing hero', () => {
     let expectedHero: Hero;
 
@@ -152,11 +145,11 @@ function heroModuleSetup() {
       createComponent();
     }));
 
-  // #docregion selected-tests
+
     it('should display that hero\'s name', () => {
       expect(page.nameDisplay.textContent).toBe(expectedHero.name);
     });
-  // #enddocregion route-good-id
+
 
     it('should navigate when click cancel', () => {
       click(page.cancelBtn);
@@ -175,7 +168,7 @@ function heroModuleSetup() {
       expect(page.navSpy.calls.any()).toBe(true, 'router.navigate called');
     }));
 
-    // #docregion title-case-pipe
+    //// TITLE CASE PIPE
     it('should convert hero name to Title Case', fakeAsync(() => {
       const inputName = 'quick BROWN  fox';
       const titleCaseName = 'Quick Brown  Fox';
@@ -191,13 +184,9 @@ function heroModuleSetup() {
 
       expect(page.nameDisplay.textContent).toBe(titleCaseName);
     }));
-    // #enddocregion title-case-pipe
-  // #enddocregion selected-tests
-  // #docregion route-good-id
-  });
-  // #enddocregion route-good-id
 
-  // #docregion route-no-id
+  });
+
   describe('when navigate with no hero id', () => {
     beforeEach( async( createComponent ));
 
@@ -209,9 +198,8 @@ function heroModuleSetup() {
       expect(page.nameDisplay.textContent).toBe('');
     });
   });
-  // #enddocregion route-no-id
 
-  // #docregion route-bad-id
+
   describe('when navigate to non-existant hero id', () => {
     beforeEach( async(() => {
       activatedRoute.testParams = { id: 99999 };
@@ -223,7 +211,6 @@ function heroModuleSetup() {
       expect(page.navSpy.calls.any()).toBe(true, 'router.navigate called');
     });
   });
-  // #enddocregion route-bad-id
 
   // Why we must use `fixture.debugElement.injector` in `Page()`
   it('cannot use `inject` to get component\'s provided HeroDetailService', () => {
@@ -242,12 +229,15 @@ function heroModuleSetup() {
   });
 }
 
+
+///////////   SKIP THIS  //////////////////
+
 /////////////////////
 import { FormsModule }         from '@angular/forms';
 import { TitleCasePipe }       from '../shared/title-case.pipe';
 
 function formsModuleSetup() {
- // #docregion setup-forms-module
+
   beforeEach( async(() => {
      TestBed.configureTestingModule({
       imports:      [ FormsModule ],
@@ -260,7 +250,7 @@ function formsModuleSetup() {
     })
     .compileComponents();
   }));
-  // #enddocregion setup-forms-module
+
 
   it('should display 1st hero\'s name', fakeAsync(() => {
     const expectedHero = firstHero;
@@ -275,7 +265,7 @@ function formsModuleSetup() {
 import { SharedModule }        from '../shared/shared.module';
 
 function sharedModuleSetup() {
-  // #docregion setup-shared-module
+
   beforeEach( async(() => {
     TestBed.configureTestingModule({
       imports:      [ SharedModule ],
@@ -288,7 +278,7 @@ function sharedModuleSetup() {
     })
     .compileComponents();
   }));
-  // #enddocregion setup-shared-module
+
 
   it('should display 1st hero\'s name', fakeAsync(() => {
     const expectedHero = firstHero;
@@ -299,9 +289,10 @@ function sharedModuleSetup() {
   }));
 }
 
+///////////   RESUME HERE  //////////////////
+
 /////////// Helpers /////
 
-// #docregion create-component
 /** Create the HeroDetailComponent, initialize it, set test variables  */
 function createComponent() {
   fixture = TestBed.createComponent(HeroDetailComponent);
@@ -316,9 +307,7 @@ function createComponent() {
     page.addPageElements();
   });
 }
-// #enddocregion create-component
 
-// #docregion page
 class Page {
   gotoSpy:      jasmine.Spy;
   navSpy:       jasmine.Spy;
@@ -352,4 +341,3 @@ class Page {
     }
   }
 }
-// #enddocregion page

@@ -18,7 +18,6 @@ describe('TwainComponent', () => {
 
   const testQuote = 'Test Quote';
 
-  // #docregion setup
   beforeEach(() => {
     TestBed.configureTestingModule({
        declarations: [ TwainComponent ],
@@ -31,19 +30,15 @@ describe('TwainComponent', () => {
     // TwainService actually injected into the component
     twainService = fixture.debugElement.injector.get(TwainService);
 
-    // Setup spy on the `getQuote` method
-    // #docregion spy
+    // Setup spy on the REAL SERVICE `getQuote` method
     spy = spyOn(twainService, 'getQuote')
           .and.returnValue(Promise.resolve(testQuote));
-    // #enddocregion spy
 
     // Get the Twain quote element by CSS selector (e.g., by class name)
     de = fixture.debugElement.query(By.css('.twain'));
     el = de.nativeElement;
   });
-  // #enddocregion setup
 
-  // #docregion tests
   it('should not show quote before OnInit', () => {
     expect(el.textContent).toBe('', 'nothing displayed');
     expect(spy.calls.any()).toBe(false, 'getQuote not yet called');
@@ -56,29 +51,23 @@ describe('TwainComponent', () => {
     expect(spy.calls.any()).toBe(true, 'getQuote called');
   });
 
-  // #docregion async-test
   it('should show quote after getQuote promise (async)', async(() => {
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => { // wait for async getQuote
+    fixture.whenStable().then(() => { // WHEN_STABLE: wait for async getQuote
       fixture.detectChanges();        // update view with quote
       expect(el.textContent).toBe(testQuote);
     });
   }));
-  // #enddocregion async-test
 
-  // #docregion fake-async-test
   it('should show quote after getQuote promise (fakeAsync)', fakeAsync(() => {
     fixture.detectChanges();
-    tick();                  // wait for async getQuote
+    tick();                  // TICK: wait for async getQuote
     fixture.detectChanges(); // update view with quote
     expect(el.textContent).toBe(testQuote);
   }));
-  // #enddocregion fake-async-test
-  // #enddocregion tests
 
-  // #docregion done-test
-  it('should show quote after getQuote promise (done)', done => {
+  it('should show quote after getQuote promise (done)', done => { // JASMINE DONE
     fixture.detectChanges();
 
     // get the spy promise and wait for it to resolve
@@ -88,5 +77,5 @@ describe('TwainComponent', () => {
       done();
     });
   });
-  // #enddocregion done-test
+
 });

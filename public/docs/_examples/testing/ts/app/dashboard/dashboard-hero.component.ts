@@ -1,9 +1,7 @@
-// #docregion
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Hero } from '../model';
 
-// #docregion component
 @Component({
   moduleId: module.id,
   selector:    'dashboard-hero',
@@ -15,4 +13,3 @@ export class DashboardHeroComponent {
   @Output() selected = new EventEmitter<Hero>();
   click() { this.selected.next(this.hero); }
 }
-// #enddocregion component

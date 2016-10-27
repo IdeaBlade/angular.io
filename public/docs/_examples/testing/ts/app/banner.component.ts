@@ -1,4 +1,3 @@
-// #docregion
 import { Component }   from '@angular/core';
 
 @Component({

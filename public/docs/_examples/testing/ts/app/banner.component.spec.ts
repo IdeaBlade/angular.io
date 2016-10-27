@@ -1,14 +1,9 @@
-// #docplaster
-// #docregion
-// #docregion imports
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { DebugElement }    from '@angular/core';
 
 import { BannerComponent } from './banner.component';
-// #enddocregion imports
 
-// #docregion setup
 let comp:    BannerComponent;
 let fixture: ComponentFixture<BannerComponent>;
 let de:      DebugElement;
@@ -29,8 +24,7 @@ describe('BannerComponent', () => {
     el = de.nativeElement;
 
   });
-// #enddocregion setup
-  // #docregion tests
+
   it('should display original title', () => {
     fixture.detectChanges();
     expect(el.textContent).toContain(comp.title);
@@ -41,16 +35,13 @@ describe('BannerComponent', () => {
     fixture.detectChanges();
     expect(el.textContent).toContain('Test Title');
   });
-  // #enddocregion tests
-  // #docregion test-w-o-detect-changes
+
   it('no title in the DOM until manually call `detectChanges`', () => {
     expect(el.textContent).toEqual('');
   });
-  // #enddocregion test-w-o-detect-changes
 
-// #docregion setup
 });
-// #enddocregion setup
+
 
 /////////  With AutoChangeDetect /////
 import { ComponentFixtureAutoDetect } from '@angular/core/testing';
@@ -65,7 +56,6 @@ describe('BannerComponent with AutoChangeDetect', () => {
         { provide: ComponentFixtureAutoDetect, useValue: true }
       ]
     })
-    // #enddocregion auto-detect
     .createComponent(BannerComponent);
 
     comp = fixture.componentInstance; // BannerComponent test instance
@@ -75,7 +65,6 @@ describe('BannerComponent with AutoChangeDetect', () => {
     el = de.nativeElement;
   });
 
-  // #docregion auto-detect-tests
   it('should display original title', () => {
     // Hooray! No `fixture.detectChanges()` needed
     expect(el.textContent).toContain(comp.title);
@@ -93,12 +82,10 @@ describe('BannerComponent with AutoChangeDetect', () => {
     fixture.detectChanges(); // detect changes explicitly
     expect(el.textContent).toContain(comp.title);
   });
-  // #enddocregion auto-detect-tests
 });
 
 
 describe('BannerComponent (simpified)', () => {
-  // #docregion simple-example-before-each
   beforeEach(() => {
 
     // refine the test module by declaring the test component
@@ -112,9 +99,7 @@ describe('BannerComponent (simpified)', () => {
     // get test component from the fixture
     comp = fixture.componentInstance;
   });
-  // #enddocregion simple-example-before-each
 
-  // #docregion simple-example-it
   it('should display original title', () => {
 
     // trigger change detection to update the view
@@ -126,5 +111,4 @@ describe('BannerComponent (simpified)', () => {
     // confirm the element's content
     expect(de.nativeElement.textContent).toContain(comp.title);
   });
-  // #enddocregion simple-example-it
 });

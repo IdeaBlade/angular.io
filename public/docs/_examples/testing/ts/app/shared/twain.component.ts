@@ -1,9 +1,7 @@
-// #docregion
 import { Component, OnInit } from '@angular/core';
 
 import { TwainService } from './twain.service';
 
-// #docregion component
 @Component({
   selector: 'twain-quote',
   template: '<p class="twain"><i>{{quote}}</i></p>'
@@ -17,4 +15,3 @@ export class TwainComponent  implements OnInit {
     this.twainService.getQuote().then(quote => this.quote = quote);
   }
 }
-// #enddocregion component
